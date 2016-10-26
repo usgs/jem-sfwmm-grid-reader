@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import gov.usgs.jem.swfmm.grid.input.GIOReaderTest;
 import gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImplTest;
 
 /**
@@ -19,8 +20,8 @@ import gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImplTest;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ SeekableDataFileInputStreamImplTest.class,
-		GIOHeaderTest.class })
+@SuiteClasses({ SeekableDataFileInputStreamImplTest.class, GIOHeaderTest.class,
+		GIOReaderTest.class })
 public class AllTests
 {
 	/**
