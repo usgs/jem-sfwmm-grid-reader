@@ -26,6 +26,13 @@ import gov.usgs.jem.swfmm.grid.AllTests;
 public class SeekableDataFileInputStreamImplTest
 {
 
+	private static final java.util.Random r;
+
+	static
+	{
+		r = new java.util.Random(System.currentTimeMillis());
+	}
+
 	/**
 	 * Create a new {@link ByteBuffer} instance from the provided array
 	 *
@@ -219,6 +226,21 @@ public class SeekableDataFileInputStreamImplTest
 		Assert.assertEquals(m_FilePath, m_Input.getFilePath());
 	}
 
+	/**
+	 * Test method for
+	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#getPosition()}.
+	 *
+	 * @throws IOException
+	 */
+	@Test
+	public final void testGetPosition() throws IOException
+	{
+		Assert.assertEquals(0, m_Input.getPosition());
+		final int pos = Math.abs(r.nextInt(10)) + 1;
+		m_Input.readFully(new byte[pos]);
+		Assert.assertEquals(pos, m_Input.getPosition());
+	}
+
 	@Test
 	public final void testHashCode() throws Exception
 	{
@@ -246,6 +268,8 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final boolean actual = m_Input.readBoolean();
 		Assert.assertEquals(m_ExpectedBoolean, actual);
+		Assert.assertEquals(1, m_Input.getPosition());
+
 	}
 
 	/**
@@ -259,6 +283,8 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final byte actual = m_Input.readByte();
 		Assert.assertEquals(m_ExpectedByte, actual);
+		Assert.assertEquals(1, m_Input.getPosition());
+
 	}
 
 	/**
@@ -272,6 +298,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final char actual = m_Input.readChar();
 		Assert.assertEquals(m_ExpectedChar, actual);
+		Assert.assertEquals(2, m_Input.getPosition());
 	}
 
 	/**
@@ -285,6 +312,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final char[] actual = m_Input.readCharsAsAscii(1);
 		Assert.assertEquals(m_ExpectedCharAscii, actual[0]);
+		Assert.assertEquals(1, m_Input.getPosition());
 	}
 
 	/**
@@ -298,6 +326,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final double actual = m_Input.readDouble();
 		Assert.assertEquals(m_ExpectedDouble, actual, Double.MIN_NORMAL);
+		Assert.assertEquals(Double.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -311,6 +340,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final float actual = m_Input.readFloat();
 		Assert.assertEquals(m_ExpectedFloat, actual, Float.MIN_NORMAL);
+		Assert.assertEquals(Float.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -322,9 +352,11 @@ public class SeekableDataFileInputStreamImplTest
 	@Test
 	public final void testReadFullyByteArray() throws IOException
 	{
-		final byte[] actual = new byte[2];
+		final int size = 2;
+		final byte[] actual = new byte[size];
 		m_Input.readFully(actual);
 		Assert.assertArrayEquals(m_ExpectedBytes, actual);
+		Assert.assertEquals(size, m_Input.getPosition());
 	}
 
 	/**
@@ -336,9 +368,11 @@ public class SeekableDataFileInputStreamImplTest
 	@Test
 	public final void testReadFullyByteArrayIntInt() throws IOException
 	{
-		final byte[] actual = new byte[2];
-		m_Input.readFully(actual, 0, 2);
+		final int size = 2;
+		final byte[] actual = new byte[size];
+		m_Input.readFully(actual, 0, size);
 		Assert.assertArrayEquals(m_ExpectedBytes, actual);
+		Assert.assertEquals(size, m_Input.getPosition());
 	}
 
 	/**
@@ -352,6 +386,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final int actual = m_Input.readInt();
 		Assert.assertEquals(m_ExpectedInt, actual);
+		Assert.assertEquals(Integer.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -368,6 +403,7 @@ public class SeekableDataFileInputStreamImplTest
 			final String readLine = m_Input.readLine();
 			Assert.assertTrue(
 					readLine.startsWith("OPTB2 - CERP with LORS2008"));
+			Assert.assertEquals(readLine.length(), m_Input.getPosition());
 		}
 		catch (final UnsupportedOperationException e)
 		{
@@ -386,6 +422,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final long actual = m_Input.readLong();
 		Assert.assertEquals(m_ExpectedLong, actual);
+		Assert.assertEquals(Long.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -399,6 +436,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final short actual = m_Input.readShort();
 		Assert.assertEquals(m_ExpectedShort, actual);
+		Assert.assertEquals(Short.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -412,6 +450,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final int actual = m_Input.readUInt32();
 		Assert.assertEquals(m_ExpectedUInt32, actual);
+		Assert.assertEquals(Integer.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -425,6 +464,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final int actual = m_Input.readUnsignedByte();
 		Assert.assertEquals(m_ExpectedUByte, actual);
+		Assert.assertEquals(1, m_Input.getPosition());
 	}
 
 	/**
@@ -438,6 +478,7 @@ public class SeekableDataFileInputStreamImplTest
 	{
 		final int actual = m_Input.readUnsignedShort();
 		Assert.assertEquals(m_ExpectedUShort, actual);
+		Assert.assertEquals(Short.BYTES, m_Input.getPosition());
 	}
 
 	/**
@@ -467,6 +508,7 @@ public class SeekableDataFileInputStreamImplTest
 		final int seek = m_Input.seek(position);
 		Assert.assertEquals(position, seek);
 		Assert.assertEquals(m_Bytes[position], m_Input.readByte());
+		Assert.assertEquals(position + 1, m_Input.getPosition());
 	}
 
 	/**
@@ -482,11 +524,13 @@ public class SeekableDataFileInputStreamImplTest
 		int seek = m_Input.skipBytes(position);
 		Assert.assertEquals(position, seek);
 		Assert.assertEquals(m_Bytes[position], m_Input.readByte());
+		Assert.assertEquals(position + 1, m_Input.getPosition());
 
 		seek = m_Input.skipBytes(position);
 		Assert.assertEquals(position, seek);
 		Assert.assertEquals(m_Bytes[position + position + 1],
 				m_Input.readByte());
+		Assert.assertEquals(position + seek + 1 + 1, m_Input.getPosition());
 	}
 
 	/**
@@ -502,11 +546,13 @@ public class SeekableDataFileInputStreamImplTest
 		int seek = m_Input.skipBytesAggressive(position);
 		Assert.assertEquals(position, seek);
 		Assert.assertEquals(m_Bytes[position], m_Input.readByte());
+		Assert.assertEquals(position + 1, m_Input.getPosition());
 
 		seek = m_Input.skipBytesAggressive(position);
 		Assert.assertEquals(position, seek);
 		Assert.assertEquals(m_Bytes[position + position + 1],
 				m_Input.readByte());
+		Assert.assertEquals(position + seek + 1 + 1, m_Input.getPosition());
 	}
 
 }

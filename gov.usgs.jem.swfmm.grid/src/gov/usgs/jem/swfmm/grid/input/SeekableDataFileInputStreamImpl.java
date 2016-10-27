@@ -65,6 +65,8 @@ final class SeekableDataFileInputStreamImpl
 	 */
 	private BufferedInputStream	m_InputStream;
 
+	private int					m_Position;
+
 	/**
 	 * Create a new {@link DataInputStream} using the provided file path and
 	 * endianness.
@@ -99,6 +101,8 @@ final class SeekableDataFileInputStreamImpl
 	public void close() throws IOException
 	{
 		IOException ioE = null;
+
+		m_Position = -1;
 
 		try
 		{
@@ -162,6 +166,12 @@ final class SeekableDataFileInputStreamImpl
 	}
 
 	@Override
+	public int getPosition()
+	{
+		return m_Position;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		return Objects.hashCode(m_ByteOrder, m_FilePath);
@@ -215,24 +225,46 @@ final class SeekableDataFileInputStreamImpl
 		{
 			throw new IllegalArgumentException("Invalid byte order.");
 		}
+		m_Position = 0;
 	}
 
 	@Override
 	public boolean readBoolean() throws IOException
 	{
-		return m_DataInputStream.readBoolean();
+		try
+		{
+			return m_DataInputStream.readBoolean();
+		}
+		finally
+		{
+			m_Position += 1;
+		}
 	}
 
 	@Override
 	public byte readByte() throws IOException
 	{
-		return m_DataInputStream.readByte();
+		try
+		{
+			return m_DataInputStream.readByte();
+		}
+		finally
+		{
+			m_Position += 1;
+		}
 	}
 
 	@Override
 	public char readChar() throws IOException
 	{
-		return m_DataInputStream.readChar();
+		try
+		{
+			return m_DataInputStream.readChar();
+		}
+		finally
+		{
+			m_Position += 2;
+		}
 	}
 
 	@Override
@@ -251,50 +283,101 @@ final class SeekableDataFileInputStreamImpl
 	@Override
 	public double readDouble() throws IOException
 	{
-		return m_DataInputStream.readDouble();
+		try
+		{
+			return m_DataInputStream.readDouble();
+		}
+		finally
+		{
+			m_Position += 8;
+		}
 	}
 
 	@Override
 	public float readFloat() throws IOException
 	{
-		return m_DataInputStream.readFloat();
+		try
+		{
+			return m_DataInputStream.readFloat();
+		}
+		finally
+		{
+			m_Position += 4;
+		}
 	}
 
 	@Override
 	public void readFully(final byte[] p_ByteBuffer) throws IOException
 	{
-		m_DataInputStream.readFully(p_ByteBuffer);
+		try
+		{
+			m_DataInputStream.readFully(p_ByteBuffer);
+		}
+		finally
+		{
+			m_Position += p_ByteBuffer.length;
+		}
 	}
 
 	@Override
 	public void readFully(final byte[] p_ByteBuffer, final int p_Offset,
 			final int p_Length) throws IOException
 	{
-		m_DataInputStream.readFully(p_ByteBuffer, p_Offset, p_Length);
+		try
+		{
+			m_DataInputStream.readFully(p_ByteBuffer, p_Offset, p_Length);
+		}
+		finally
+		{
+			m_Position += p_Length;
+		}
 	}
 
 	@Override
 	public int readInt() throws IOException
 	{
-		return m_DataInputStream.readInt();
+		try
+		{
+			return m_DataInputStream.readInt();
+		}
+		finally
+		{
+			m_Position += 4;
+		}
 	}
 
 	@Override
 	public String readLine() throws IOException
 	{
-		return m_DataInputStream.readLine();
+		final String line = m_DataInputStream.readLine();
+		m_Position += line.getBytes().length;
+		return line;
 	}
 
 	@Override
 	public long readLong() throws IOException
 	{
-		return m_DataInputStream.readLong();
+		try
+		{
+			return m_DataInputStream.readLong();
+		}
+		finally
+		{
+			m_Position += 8;
+		}
 	}
 
 	@Override
 	public short readShort() throws IOException
 	{
-		return m_DataInputStream.readShort();
+		try
+		{
+			return m_DataInputStream.readShort();
+		}
+		finally
+		{
+			m_Position += 2;
+		}
 	}
 
 	@Override
@@ -315,32 +398,49 @@ final class SeekableDataFileInputStreamImpl
 	@Override
 	public int readUnsignedByte() throws IOException
 	{
-		return m_DataInputStream.readUnsignedByte();
+		try
+		{
+			return m_DataInputStream.readUnsignedByte();
+		}
+		finally
+		{
+			m_Position += 1;
+		}
 	}
 
 	@Override
 	public int readUnsignedShort() throws IOException
 	{
-		return m_DataInputStream.readUnsignedShort();
+		try
+		{
+			return m_DataInputStream.readUnsignedShort();
+		}
+		finally
+		{
+			m_Position += 2;
+		}
 	}
 
 	@Override
 	public String readUTF() throws IOException
 	{
-		return m_DataInputStream.readUTF();
+		throw new UnsupportedOperationException("Not supported.");
 	}
 
 	@Override
 	public int seek(final int p_Position) throws IOException
 	{
 		initialize(m_FilePath, m_ByteOrder);
-		return skipBytes(p_Position);
+		final int skipBytes = skipBytes(p_Position);
+		return skipBytes;
 	}
 
 	@Override
 	public int skipBytes(final int p_NumBytes) throws IOException
 	{
-		return m_DataInputStream.skipBytes(p_NumBytes);
+		final int skipBytes = m_DataInputStream.skipBytes(p_NumBytes);
+		m_Position += skipBytes;
+		return skipBytes;
 	}
 
 	@Override
