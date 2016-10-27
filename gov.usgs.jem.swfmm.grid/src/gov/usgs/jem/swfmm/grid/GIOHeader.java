@@ -3,9 +3,7 @@ package gov.usgs.jem.swfmm.grid;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Splitter;
 
 /**
  * The SFWMM GridIO header structure. Use {@link #builder()} to construct a new
@@ -258,12 +256,9 @@ public final class GIOHeader
 	@Override
 	public String toString()
 	{
-		return getClass().getSimpleName() + "\n" + Joiner.on("\n").join(Splitter
-				.on(",")
-				.splitToList(MoreObjects.toStringHelper("")
-						.add("title", m_Title).add("numRows", m_NumRows)
-						.add("numNodes", m_NumNodes).add("size_x", m_SizeX)
-						.add("size_y", m_SizeY).toString()));
+		return MoreObjects.toStringHelper(this).add("title", m_Title)
+				.add("numRows", m_NumRows).add("numNodes", m_NumNodes)
+				.add("size_x", m_SizeX).add("size_y", m_SizeY).toString();
 	}
 
 }
