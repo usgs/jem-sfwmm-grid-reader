@@ -57,7 +57,9 @@ public class AllTests
 	 */
 	public static final File getTestFile()
 	{
-		return new File("test/data/eomth_stage.bin");
+		final String path = gov.usgs.jem.sfwmm.grid.AllTests.getTestFile()
+				.getPath();
+		return new File(String.format("../gov.usgs.jem.sfwmm.grid/%s", path));
 	}
 
 	@BeforeClass
