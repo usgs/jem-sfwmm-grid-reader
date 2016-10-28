@@ -289,8 +289,9 @@ public final class GIOHeader
 	public String toString()
 	{
 		return MoreObjects.toStringHelper(this).add("title", m_Title)
-				.add("numRows", m_NumRows).add("numNodes", m_NumNodes)
-				.add("size_x", m_SizeX).add("size_y", m_SizeY).toString();
+				.add("numRows", m_NumRows).add("numCols", m_NumCols)
+				.add("numNodes", m_NumNodes).add("size_x", m_SizeX)
+				.add("size_y", m_SizeY).toString();
 	}
 
 }
