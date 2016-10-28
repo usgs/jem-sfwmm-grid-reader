@@ -24,6 +24,7 @@ public final class GIOHeader
 	 */
 	public static class Builder
 	{
+		private int		m_bNumCols;
 		private int		m_bNumNodes;
 		private int		m_bNumRows;
 		private float	m_bSizeX;
@@ -41,6 +42,20 @@ public final class GIOHeader
 		public GIOHeader build() throws Exception
 		{
 			return new GIOHeader(this);
+		}
+
+		/**
+		 * Set the number of Cols
+		 *
+		 * @param p_NumCols
+		 *            the number of Cols
+		 * @return this builder
+		 * @since Oct 28, 2016
+		 */
+		public Builder withNumCols(final int p_NumCols)
+		{
+			m_bNumCols = p_NumCols;
+			return this;
 		}
 
 		/**
@@ -104,18 +119,11 @@ public final class GIOHeader
 	}
 
 	/**
-	 * The number of bytes used for grid tags
-	 *
-	 * @since Oct 25, 2016
-	 */
-	public static final int	GRID_TAG_LENGTH		= 80;
-
-	/**
 	 * The number of bytes used for the grid title
 	 *
 	 * @since Oct 25, 2016
 	 */
-	public static final int	GRID_TITLE_LENGTH	= 80;
+	public static final int GRID_TITLE_LENGTH = 80;
 
 	/**
 	 * Creates a new, empty builder
@@ -127,6 +135,13 @@ public final class GIOHeader
 	{
 		return new Builder();
 	}
+
+	/**
+	 * The number of Cols in the file.
+	 *
+	 * @since Oct 28, 2016
+	 */
+	private final int		m_NumCols;
 
 	/**
 	 * The number of Nodes in the file.
@@ -173,6 +188,7 @@ public final class GIOHeader
 	{
 		m_Title = p_Builder.m_bTitle;
 		m_NumRows = p_Builder.m_bNumRows;
+		m_NumCols = p_Builder.m_bNumCols;
 		m_NumNodes = p_Builder.m_bNumNodes;
 		m_SizeX = p_Builder.m_bSizeX;
 		m_SizeY = p_Builder.m_bSizeY;
@@ -189,6 +205,11 @@ public final class GIOHeader
 		checkArgument(condition,
 				"Number of rows must be greater than 0, but is %s", m_NumRows);
 
+		condition = m_NumCols > 0;
+		checkArgument(condition,
+				"Number of columns must be greater than 0, but is %s",
+				m_NumCols);
+
 		condition = m_NumNodes > 0;
 		checkArgument(condition,
 				"Number of nodes must be greater than 0, but is %s",
@@ -200,6 +221,17 @@ public final class GIOHeader
 		condition = m_SizeY > 0;
 		checkArgument(condition, "Y size must be greater than 0");
 
+	}
+
+	/**
+	 * Get the number of Cols
+	 *
+	 * @return the number of Cols
+	 * @since Oct 28, 2016
+	 */
+	public int getColsSize()
+	{
+		return m_NumCols;
 	}
 
 	/**

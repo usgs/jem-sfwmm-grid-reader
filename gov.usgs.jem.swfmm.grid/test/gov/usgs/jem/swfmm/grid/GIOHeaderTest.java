@@ -43,34 +43,6 @@ public class GIOHeaderTest
 	}
 
 	/**
-	 * @return the next random unsigned int value
-	 * @since Oct 25, 2016
-	 */
-	private static int nextUInt()
-	{
-		int v = r.nextInt();
-		while (v < 0)
-		{
-			v = r.nextInt();
-		}
-		return v;
-	}
-
-	/**
-	 * @return the next random unsigned long value
-	 * @since Oct 25, 2016
-	 */
-	private static long nextULong()
-	{
-		long v = r.nextLong();
-		while (v < 0)
-		{
-			v = r.nextLong();
-		}
-		return v;
-	}
-
-	/**
 	 * @throws java.lang.Exception
 	 *             if unexpected condition causing test failure
 	 * @since Oct 25, 2016
@@ -94,7 +66,7 @@ public class GIOHeaderTest
 	public void setUp() throws Exception
 	{
 		m_Builder = GIOHeader.builder().withTitle("TITLE").withNumRows(1)
-				.withNumNodes(1).withSize(2.0f, 2.0f);
+				.withNumCols(1).withNumNodes(1).withSize(2.0f, 2.0f);
 	}
 
 	/**
@@ -107,6 +79,20 @@ public class GIOHeaderTest
 	{
 		Assert.assertNotNull(GIOHeader.builder());
 		Assert.assertNotNull(m_Builder.build());
+	}
+
+	/**
+	 * Test method for {@link gov.usgs.jem.swfmm.grid.GIOHeader#getColsSize()}.
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void testGetColsSize() throws Exception
+	{
+		final int v = Math.abs(r.nextInt()) + 1;
+		Assert.assertEquals(v, m_Builder.withNumCols(v).build().getColsSize());
+
+		expectFailure(m_Builder.withNumCols(0));
 	}
 
 	/**
