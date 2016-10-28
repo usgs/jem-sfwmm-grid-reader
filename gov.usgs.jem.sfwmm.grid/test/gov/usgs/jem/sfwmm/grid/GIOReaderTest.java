@@ -16,9 +16,6 @@ import org.junit.Test;
 import com.google.common.collect.Range;
 import com.google.common.collect.Table;
 
-import gov.usgs.jem.sfwmm.grid.GIOHeader;
-import gov.usgs.jem.sfwmm.grid.GIOReader;
-
 /**
  * Tests {@link GIOReader}
  *
@@ -94,8 +91,7 @@ public class GIOReaderTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#getDates()}.
+	 * Test method for {@link gov.usgs.jem.sfwmm.grid.GIOReader#getDates()}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException
@@ -111,8 +107,7 @@ public class GIOReaderTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#getFilePath()}.
+	 * Test method for {@link gov.usgs.jem.sfwmm.grid.GIOReader#getFilePath()}.
 	 */
 	@Test
 	public void testGetFilePath()
@@ -122,8 +117,7 @@ public class GIOReaderTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#getHeader()}.
+	 * Test method for {@link gov.usgs.jem.sfwmm.grid.GIOReader#getHeader()}.
 	 */
 	@Test
 	public void testGetHeader()

@@ -9,8 +9,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import gov.usgs.jem.sfwmm.grid.GIOHeader;
-
 /**
  * Tests {@link GIOHeader}
  *

@@ -18,7 +18,7 @@ import com.google.common.collect.Sets;
  * @since Oct 25, 2016
  *
  */
-public final class Tests
+final class Tests
 {
 	/**
 	 * Test name prefix.
