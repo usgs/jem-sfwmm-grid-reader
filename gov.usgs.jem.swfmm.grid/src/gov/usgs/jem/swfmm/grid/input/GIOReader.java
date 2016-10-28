@@ -399,19 +399,6 @@ public final class GIOReader implements Closeable
 			final float sizeX = m_DIS.readFloat();
 			final float sizeY = m_DIS.readFloat();
 
-			try
-			{
-				m_Header = headerBuilder.withTitle(title).withNumRows(numRows)
-						.withNumNodes(numNodes).withSize(sizeX, sizeY).build();
-				log.debug(m_Header);
-			}
-			catch (final Exception e)
-			{
-				final String message = "Unable to read header from file: "
-						+ m_FilePath;
-				throw new IOException(message, e);
-			}
-
 			final List<Integer> config = IntStream.range(0, numRows * 3)
 					.map(this::readInt).boxed().collect(Collectors.toList());
 
@@ -439,28 +426,50 @@ public final class GIOReader implements Closeable
 				}
 			}
 
+			int numCols = 0;
 			for (int row = 0; row < numRows; row++)
 			{
 				final int xstart = config.get(row);
 				final int xend = config.get(row + numRows);
 				m_AvailabilityMap.put(row, Range.closed(xstart, xend));
+				numCols = Math.max(numCols, xend + 1);
 			}
 
+			try
+			{
+				m_Header = headerBuilder.withTitle(title).withNumRows(numRows)
+						.withNumCols(numCols).withNumNodes(numNodes)
+						.withSize(sizeX, sizeY).build();
+				log.debug(m_Header);
+			}
+			catch (final Exception e)
+			{
+				final String message = "Unable to read header from file: "
+						+ m_FilePath;
+				throw new IOException(message, e);
+			}
+
+			/**
+			 * Debugging information
+			 */
 			int row = 0;
-			IntStream.range(numRows * row, numRows * (row + 1))
-					.forEach(x -> System.out
-							.print(String.format("%4d ", config.get(x))));
-			System.out.println();
+			final String starts = IntStream
+					.range(numRows * row, numRows * (row + 1))
+					.mapToObj(config::get).map(x -> String.format("%4d", x))
+					.collect(Collectors.joining(" "));
 			row++;
-			IntStream.range(numRows * row, numRows * (row + 1))
-					.forEach(x -> System.out
-							.print(String.format("%4d ", config.get(x))));
-			System.out.println();
+			final String ends = IntStream
+					.range(numRows * row, numRows * (row + 1))
+					.mapToObj(config::get).map(x -> String.format("%4d", x))
+					.collect(Collectors.joining(" "));
 			row++;
-			IntStream.range(numRows * row, numRows * (row + 1))
-					.forEach(x -> System.out
-							.print(String.format("%4d ", config.get(x))));
-			System.out.println();
+			final String sums = IntStream
+					.range(numRows * row, numRows * (row + 1))
+					.mapToObj(config::get).map(x -> String.format("%4d", x))
+					.collect(Collectors.joining(" "));
+			log.debug(String.format("xStarts: %s", starts));
+			log.debug(String.format("xEnds:   %s", ends));
+			log.debug(String.format("nSums:   %s", sums));
 
 			m_GridSize = GRID_TAG_LENGTH + numNodes * Float.BYTES;
 			m_GridStartByte = m_DIS.getPosition();
@@ -493,6 +502,8 @@ public final class GIOReader implements Closeable
 			close();
 		}
 	}
+
+	// public
 
 	/**
 	 * Reads an intenger from the input stream
