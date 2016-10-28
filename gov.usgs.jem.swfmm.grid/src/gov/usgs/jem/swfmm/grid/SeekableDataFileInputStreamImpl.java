@@ -1,4 +1,4 @@
-package gov.usgs.jem.swfmm.grid.input;
+package gov.usgs.jem.swfmm.grid;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

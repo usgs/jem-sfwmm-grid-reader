@@ -1,4 +1,4 @@
-package gov.usgs.jem.swfmm.grid.input;
+package gov.usgs.jem.swfmm.grid;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -13,7 +13,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import gov.usgs.jem.swfmm.grid.AllTests;
+import gov.usgs.jem.swfmm.grid.SeekableDataFileInputStream;
+import gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl;
 
 /**
  * Tests {@link SeekableDataFileInputStreamImpl}
@@ -174,7 +175,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#close()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#close()}.
 	 */
 	@Test
 	public final void testClose()
@@ -208,7 +209,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#getByteOrder()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#getByteOrder()}.
 	 */
 	@Test
 	public final void testGetByteOrder()
@@ -218,7 +219,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#getFilePath()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#getFilePath()}.
 	 */
 	@Test
 	public final void testGetFilePath()
@@ -228,7 +229,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#getPosition()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#getPosition()}.
 	 *
 	 * @throws IOException
 	 */
@@ -259,7 +260,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readBoolean()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readBoolean()}.
 	 *
 	 * @throws IOException
 	 */
@@ -274,7 +275,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readByte()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readByte()}.
 	 *
 	 * @throws IOException
 	 */
@@ -289,7 +290,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readChar()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readChar()}.
 	 *
 	 * @throws IOException
 	 */
@@ -303,7 +304,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readCharsAsAscii(int)}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readCharsAsAscii(int)}.
 	 *
 	 * @throws IOException
 	 */
@@ -317,7 +318,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readDouble()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readDouble()}.
 	 *
 	 * @throws IOException
 	 */
@@ -331,7 +332,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readFloat()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readFloat()}.
 	 *
 	 * @throws IOException
 	 */
@@ -345,7 +346,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readFully(byte[])}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readFully(byte[])}.
 	 *
 	 * @throws IOException
 	 */
@@ -361,7 +362,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readFully(byte[], int, int)}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readFully(byte[], int, int)}.
 	 *
 	 * @throws IOException
 	 */
@@ -377,7 +378,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readInt()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readInt()}.
 	 *
 	 * @throws IOException
 	 */
@@ -391,7 +392,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readLine()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readLine()}.
 	 *
 	 * @throws IOException
 	 */
@@ -413,7 +414,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readLong()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readLong()}.
 	 *
 	 * @throws IOException
 	 */
@@ -427,7 +428,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readShort()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readShort()}.
 	 *
 	 * @throws IOException
 	 */
@@ -441,7 +442,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readUInt32()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readUInt32()}.
 	 *
 	 * @throws IOException
 	 */
@@ -455,7 +456,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readUnsignedByte()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readUnsignedByte()}.
 	 *
 	 * @throws IOException
 	 */
@@ -469,7 +470,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readUnsignedShort()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readUnsignedShort()}.
 	 *
 	 * @throws IOException
 	 */
@@ -483,7 +484,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#readUTF()}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#readUTF()}.
 	 *
 	 * @throws IOException
 	 */
@@ -497,7 +498,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#seek(int)}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#seek(int)}.
 	 *
 	 * @throws IOException
 	 */
@@ -513,7 +514,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#skipBytes(int)}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#skipBytes(int)}.
 	 *
 	 * @throws IOException
 	 */
@@ -535,7 +536,7 @@ public class SeekableDataFileInputStreamImplTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImpl#skipBytesAggressive(int)}.
+	 * {@link gov.usgs.jem.swfmm.grid.SeekableDataFileInputStreamImpl#skipBytesAggressive(int)}.
 	 *
 	 * @throws IOException
 	 */

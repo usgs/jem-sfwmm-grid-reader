@@ -1,4 +1,4 @@
-package gov.usgs.jem.swfmm.grid.input;
+package gov.usgs.jem.swfmm.grid;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -30,8 +30,6 @@ import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeMultiset;
 import com.google.common.io.Files;
-
-import gov.usgs.jem.swfmm.grid.GIOHeader;
 
 /**
  * Reads SFWMM GridIO files.

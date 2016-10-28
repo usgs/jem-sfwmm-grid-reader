@@ -1,4 +1,4 @@
-package gov.usgs.jem.swfmm.grid.input;
+package gov.usgs.jem.swfmm.grid;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -16,8 +16,8 @@ import org.junit.Test;
 import com.google.common.collect.Range;
 import com.google.common.collect.Table;
 
-import gov.usgs.jem.swfmm.grid.AllTests;
 import gov.usgs.jem.swfmm.grid.GIOHeader;
+import gov.usgs.jem.swfmm.grid.GIOReader;
 
 /**
  * Tests {@link GIOReader}
@@ -82,7 +82,7 @@ public class GIOReaderTest
 	}
 
 	/**
-	 * Test method for {@link gov.usgs.jem.swfmm.grid.input.GIOReader#close()}.
+	 * Test method for {@link gov.usgs.jem.swfmm.grid.GIOReader#close()}.
 	 *
 	 * @throws IOException
 	 *             unable to close
@@ -95,7 +95,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#getDates()}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#getDates()}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException
@@ -112,7 +112,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#getFilePath()}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#getFilePath()}.
 	 */
 	@Test
 	public void testGetFilePath()
@@ -123,7 +123,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#getHeader()}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#getHeader()}.
 	 */
 	@Test
 	public void testGetHeader()
@@ -145,7 +145,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#open(java.lang.String)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#open(java.lang.String)}.
 	 */
 	@Test
 	public void testOpen()
@@ -164,7 +164,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#openDebug(java.lang.String)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#openDebug(java.lang.String)}.
 	 */
 	@Test
 	public void testOpenDebug()
@@ -183,7 +183,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException
@@ -205,7 +205,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException
@@ -226,7 +226,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException
@@ -247,7 +247,7 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 * {@link gov.usgs.jem.swfmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
 	 *
 	 * @throws IOException
 	 * @throws ParseException

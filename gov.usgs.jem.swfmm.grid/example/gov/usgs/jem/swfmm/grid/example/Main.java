@@ -1,14 +1,25 @@
 package gov.usgs.jem.swfmm.grid.example;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Range;
+import com.google.common.collect.Table;
+
+import gov.usgs.jem.swfmm.grid.AllTests;
+import gov.usgs.jem.swfmm.grid.GIOHeader;
+import gov.usgs.jem.swfmm.grid.GIOReader;
+
 /**
- * Example using TODO
+ * Example using {@link GIOReader}
  *
  * @author mckelvym
- * @since Oct 25, 2016
+ * @since Oct 28, 2016
  *
  */
 public final class Main
@@ -23,42 +34,94 @@ public final class Main
 	{
 		BasicConfigurator.configure();
 
-		// try (BMDReader reader = BMDReader
-		// .openDebug(AllTests.getTestFile().getAbsolutePath());)
-		// {
-		// final List<BMDVariable> variables = reader.getVariables();
-		// log.info(String.format("Variables (%s): %s", variables.size(),
-		// variables.stream().map(BMDVariable::getName)
-		// .collect(Collectors.joining(", "))));
-		// final List<BMDSegment> segments = reader.getSegments();
-		// log.info(String.format("Segments (%s): %s", segments.size(),
-		// segments.stream().map(BMDSegment::getName)
-		// .collect(Collectors.joining(", "))));
-		// final List<BMDTimeStep> timeSteps = reader.getTimeSteps();
-		// log.info(String.format("Timesteps (%s): %s to %s", timeSteps.size(),
-		// new java.util.Date(timeSteps.get(0).getTime()),
-		// new java.util.Date(
-		// Iterables.getLast(timeSteps).getTime())));
-		//
-		// final ConcentrationsQuery query = reader.newConcentrationsQuery()
-		// .withAllTimeSteps()
-		// .withSegments(Arrays.asList(segments.get(0)))
-		// .withVariables(variables.stream()
-		// .filter(x -> x.getName().equals("Hydraulic Depth"))
-		// .collect(Collectors.toList()));
-		//
-		// for (final Concentration conc : query.execute())
-		// {
-		// log.info(String.format("%s, %s, %s: %s",
-		// conc.getVariable().getName(),
-		// conc.getSegment().getName(),
-		// new java.util.Date(conc.getTimeStep().getTime()),
-		// conc.getValue()));
-		// }
-		// }
-		// catch (final Throwable t)
-		// {
-		// t.printStackTrace();
-		// }
+		final File testFile = AllTests.getTestFile();
+		for (final File file : testFile.getParentFile().listFiles())
+		{
+			try (
+				GIOReader reader = GIOReader.openDebug(file.getAbsolutePath());)
+			{
+				final GIOHeader header = reader.getHeader();
+				log.info(header);
+				final List<Date> dates = reader.getDates();
+				log.info(String.format("Dates: %s (%s - %s)", dates.size(),
+						dates.get(0), Iterables.getLast(dates)));
+				{
+					final List<Table<Integer, Integer, Float>> data = reader
+							.readData(Range.singleton(0), Range.all(),
+									Range.all());
+					data.forEach(slice ->
+					{
+						for (int row = header.getRowsSize()
+								- 1; row >= 0; row--)
+						{
+							for (int col = 0; col < header.getColsSize(); col++)
+							{
+								final boolean contains = slice.contains(row,
+										col);
+								if (contains)
+								{
+									final Float value = slice.get(row, col);
+									if (!Float.isNaN(value))
+									{
+										System.out.print("*");
+									}
+									else
+									{
+										System.out.print(".");
+									}
+
+								}
+								else
+								{
+									System.out.print("_");
+								}
+							}
+							System.out.println();
+						}
+					});
+				}
+				log.info("Day 1 values...");
+				{
+					final List<Table<Integer, Integer, Float>> data = reader
+							.readData(Range.singleton(0), Range.all(),
+									Range.all());
+					data.forEach(slice ->
+					{
+						for (int row = header.getRowsSize()
+								- 1; row >= 0; row--)
+						{
+							for (int col = 0; col < header.getColsSize(); col++)
+							{
+								final boolean contains = slice.contains(row,
+										col);
+								if (contains)
+								{
+									final Float value = slice.get(row, col);
+									if (!Float.isNaN(value))
+									{
+										System.out.print(String.format("%5.2f ",
+												slice.get(row, col)));
+									}
+									else
+									{
+										System.out.print("   . ");
+									}
+
+								}
+								else
+								{
+									System.out.print("   _ ");
+								}
+							}
+							System.out.println();
+						}
+					});
+				}
+			}
+			catch (final Throwable t)
+			{
+				t.printStackTrace();
+			}
+		}
 	}
 }

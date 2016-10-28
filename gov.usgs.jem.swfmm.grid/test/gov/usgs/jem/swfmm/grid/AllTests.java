@@ -9,9 +9,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import gov.usgs.jem.swfmm.grid.input.GIOReaderTest;
-import gov.usgs.jem.swfmm.grid.input.SeekableDataFileInputStreamImplTest;
-
 /**
  * Tests all cases
  *

@@ -1,4 +1,4 @@
-package gov.usgs.jem.swfmm.grid.input;
+package gov.usgs.jem.swfmm.grid;
 
 import java.io.Closeable;
 import java.io.DataInput;
