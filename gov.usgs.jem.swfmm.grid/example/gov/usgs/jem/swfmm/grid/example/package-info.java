@@ -1,5 +1,5 @@
 /**
- * Contains example program(s) for reading BMD files.
+ * Contains example program(s) for reading SFWMM GridIO files.
  *
  * @author mckelvym
  * @since Oct 25, 2016
