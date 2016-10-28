@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,6 +22,8 @@ import org.apache.log4j.Level;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Range;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.TreeMultiset;
 import com.google.common.io.Files;
@@ -37,9 +40,16 @@ import gov.usgs.jem.swfmm.grid.GIOHeader;
 public final class GIOReader implements Closeable
 {
 	/**
+	 * The number of bytes used for grid tags
+	 *
+	 * @since Oct 25, 2016
+	 */
+	private static final int				GRID_TAG_LENGTH	= 80;
+
+	/**
 	 * Class logger
 	 */
-	private static org.apache.log4j.Logger log = org.apache.log4j.Logger
+	private static org.apache.log4j.Logger	log				= org.apache.log4j.Logger
 			.getLogger(GIOReader.class);
 
 	/**
@@ -136,38 +146,45 @@ public final class GIOReader implements Closeable
 	}
 
 	/**
+	 * Maps 0-based row to range of available cells (columns) within the row
+	 *
+	 * @since Oct 28, 2016
+	 */
+	private final Map<Integer, Range<Integer>>	m_AvailabilityMap;
+
+	/**
 	 * The {@link ByteOrder} to read from the file.
 	 *
 	 * @since Oct 25, 2016
 	 */
-	private final ByteOrder				m_ByteOrder;
+	private final ByteOrder						m_ByteOrder;
 
 	/**
 	 * Date formatter for tags
 	 *
 	 * @since Oct 27, 2016
 	 */
-	private final SimpleDateFormat		m_DateFormat;
+	private final SimpleDateFormat				m_DateFormat;
 
 	/**
 	 * @see #getDates()
 	 * @since Oct 27, 2016
 	 */
-	private final List<Date>			m_Dates;
+	private final List<Date>					m_Dates;
 
 	/**
 	 * The data input stream used to read from the file.
 	 *
 	 * @since Oct 25, 2016
 	 */
-	private SeekableDataFileInputStream	m_DIS;
+	private SeekableDataFileInputStream			m_DIS;
 
 	/**
 	 * Number of bytes in the file.
 	 *
 	 * @since Oct 28, 2016
 	 */
-	private final long					m_FileLength;
+	private final long							m_FileLength;
 
 	/**
 	 * The path to the SFWMM GridIO file
@@ -175,21 +192,21 @@ public final class GIOReader implements Closeable
 	 * @see #getFilePath()
 	 * @since Oct 25, 2016
 	 */
-	private final String				m_FilePath;
+	private final String						m_FilePath;
 
 	/**
 	 * Number of bytes for one timestep grid
 	 *
 	 * @since Oct 27, 2016
 	 */
-	private long						m_GridSize;
+	private long								m_GridSize;
 
 	/**
 	 * The byte offset in the file to read grids from
 	 *
 	 * @since Oct 27, 2016
 	 */
-	private long						m_GridStartByte;
+	private long								m_GridStartByte;
 
 	/**
 	 * The header for the SFWMM GridIO file
@@ -197,7 +214,7 @@ public final class GIOReader implements Closeable
 	 * @see #getHeader()
 	 * @since Oct 25, 2016
 	 */
-	private GIOHeader					m_Header;
+	private GIOHeader							m_Header;
 
 	/**
 	 * Create a new reader for the SFWMM GridIO file at the provided path
@@ -217,6 +234,7 @@ public final class GIOReader implements Closeable
 		m_DateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		m_FileLength = new File(p_FilePath).length();
 		m_Dates = Lists.newArrayList();
+		m_AvailabilityMap = Maps.newTreeMap();
 	}
 
 	/**
@@ -282,8 +300,7 @@ public final class GIOReader implements Closeable
 				/**
 				 * Ensure that enough bytes exist to continue reading tag name
 				 */
-				if (m_DIS.getPosition()
-						+ GIOHeader.GRID_TAG_LENGTH >= m_FileLength)
+				if (m_DIS.getPosition() + GRID_TAG_LENGTH >= m_FileLength)
 				{
 					break;
 				}
@@ -291,15 +308,13 @@ public final class GIOReader implements Closeable
 				 * Read tag and parse as date
 				 */
 				final String tag = new String(
-						m_DIS.readCharsAsAscii(GIOHeader.GRID_TAG_LENGTH))
-								.trim();
+						m_DIS.readCharsAsAscii(GRID_TAG_LENGTH)).trim();
 				final Date date = m_DateFormat.parse(tag);
 				dates.add(date);
 				/**
 				 * Skip the data that follows the tag name
 				 */
-				final int skipBytes = (int) (m_GridSize
-						- GIOHeader.GRID_TAG_LENGTH);
+				final int skipBytes = (int) (m_GridSize - GRID_TAG_LENGTH);
 				if (m_DIS.skipBytes(skipBytes) < skipBytes)
 				{
 					break;
@@ -404,24 +419,31 @@ public final class GIOReader implements Closeable
 			 * There might be "junk" data in this config. Adjust for this
 			 * possibility with some simple sanity checks.
 			 */
-			for (int i = 0; i < numRows - 1; i++)
+			for (int row = 0; row < numRows - 1; row++)
 			{
-				final int xstart = config.get(i);
-				final int xend = config.get(i + numRows);
-				final int sumPrev = config.get(i + numRows * 2);
-				final int sum = config.get(i + numRows * 2 + 1);
+				final int xstart = config.get(row);
+				final int xend = config.get(row + numRows);
+				final int sumPrev = config.get(row + numRows * 2);
+				final int sum = config.get(row + numRows * 2 + 1);
 				if (xstart > xend || xend > numNodes)
 				{
-					config.remove(i + numRows);
+					config.remove(row + numRows);
 					config.add(readInt());
-					i--;
+					row--;
 				}
 				else if (sum != sumPrev + xend - xstart + 1)
 				{
-					config.remove(i + numRows * 2);
+					config.remove(row + numRows * 2);
 					config.add(readInt());
-					i--;
+					row--;
 				}
+			}
+
+			for (int row = 0; row < numRows; row++)
+			{
+				final int xstart = config.get(row);
+				final int xend = config.get(row + numRows);
+				m_AvailabilityMap.put(row, Range.closed(xstart, xend));
 			}
 
 			int row = 0;
@@ -440,7 +462,7 @@ public final class GIOReader implements Closeable
 							.print(String.format("%4d ", config.get(x))));
 			System.out.println();
 
-			m_GridSize = GIOHeader.GRID_TAG_LENGTH + numNodes * Float.BYTES;
+			m_GridSize = GRID_TAG_LENGTH + numNodes * Float.BYTES;
 			m_GridStartByte = m_DIS.getPosition();
 			/**
 			 * Find the start of the first tag. Should be pretty close...
@@ -452,8 +474,7 @@ public final class GIOReader implements Closeable
 					m_DIS.seek((int) m_GridStartByte);
 				}
 				final String tag = new String(
-						m_DIS.readCharsAsAscii(GIOHeader.GRID_TAG_LENGTH))
-								.trim();
+						m_DIS.readCharsAsAscii(GRID_TAG_LENGTH)).trim();
 				try
 				{
 					m_DateFormat.parse(tag);
