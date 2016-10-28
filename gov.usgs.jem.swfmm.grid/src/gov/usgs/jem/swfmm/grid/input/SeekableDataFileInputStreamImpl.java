@@ -65,7 +65,7 @@ final class SeekableDataFileInputStreamImpl
 	 */
 	private BufferedInputStream	m_InputStream;
 
-	private int					m_Position;
+	private long				m_Position;
 
 	/**
 	 * Create a new {@link DataInputStream} using the provided file path and
@@ -166,7 +166,7 @@ final class SeekableDataFileInputStreamImpl
 	}
 
 	@Override
-	public int getPosition()
+	public long getPosition()
 	{
 		return m_Position;
 	}

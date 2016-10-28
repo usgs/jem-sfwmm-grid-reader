@@ -56,7 +56,7 @@ public interface SeekableDataFileInputStream extends DataInput, Closeable
 	 * @return the position of the pointer within the file
 	 * @since Oct 27, 2016
 	 */
-	int getPosition();
+	long getPosition();
 
 	/**
 	 * Create a new {@link SeekableDataFileInputStream} using the provided file
