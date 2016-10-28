@@ -1,6 +1,9 @@
 package gov.usgs.jem.swfmm.grid.input;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -70,6 +73,23 @@ public class GIOReaderTest
 	public void testClose() throws IOException
 	{
 		m_Reader.close();
+	}
+
+	/**
+	 * Test method for
+	 * {@link gov.usgs.jem.swfmm.grid.input.GIOReader#getDates()}.
+	 *
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Test
+	public void testGetDates() throws ParseException, IOException
+	{
+		final List<Date> dates = m_Reader.getDates();
+		Assert.assertEquals(433, dates.size());
+		Assert.assertEquals(-157766400000L, dates.get(0).getTime());
+		Assert.assertEquals(978220800000L,
+				dates.get(dates.size() - 1).getTime());
 	}
 
 	/**

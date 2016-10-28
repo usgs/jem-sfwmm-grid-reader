@@ -5,12 +5,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteOrder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.log4j.Level;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import com.google.common.collect.SortedMultiset;
+import com.google.common.collect.TreeMultiset;
 import com.google.common.io.Files;
 
 import gov.usgs.jem.swfmm.grid.GIOHeader;
@@ -131,11 +143,31 @@ public final class GIOReader implements Closeable
 	private final ByteOrder				m_ByteOrder;
 
 	/**
+	 * Date formatter for tags
+	 *
+	 * @since Oct 27, 2016
+	 */
+	private final SimpleDateFormat		m_DateFormat;
+
+	/**
+	 * @see #getDates()
+	 * @since Oct 27, 2016
+	 */
+	private final List<Date>			m_Dates;
+
+	/**
 	 * The data input stream used to read from the file.
 	 *
 	 * @since Oct 25, 2016
 	 */
 	private SeekableDataFileInputStream	m_DIS;
+
+	/**
+	 * Number of bytes in the file.
+	 *
+	 * @since Oct 28, 2016
+	 */
+	private final long					m_FileLength;
 
 	/**
 	 * The path to the SFWMM GridIO file
@@ -144,6 +176,20 @@ public final class GIOReader implements Closeable
 	 * @since Oct 25, 2016
 	 */
 	private final String				m_FilePath;
+
+	/**
+	 * Number of bytes for one timestep grid
+	 *
+	 * @since Oct 27, 2016
+	 */
+	private long						m_GridSize;
+
+	/**
+	 * The byte offset in the file to read grids from
+	 *
+	 * @since Oct 27, 2016
+	 */
+	private long						m_GridStartByte;
 
 	/**
 	 * The header for the SFWMM GridIO file
@@ -164,6 +210,13 @@ public final class GIOReader implements Closeable
 	{
 		m_FilePath = checkNotNull(p_FilePath);
 		m_ByteOrder = ByteOrder.BIG_ENDIAN;
+		/**
+		 * Tags have been observed to look like "January 1, 1965"
+		 */
+		m_DateFormat = new SimpleDateFormat("MMMM d, yyyy");
+		m_DateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		m_FileLength = new File(p_FilePath).length();
+		m_Dates = Lists.newArrayList();
 	}
 
 	/**
@@ -192,6 +245,87 @@ public final class GIOReader implements Closeable
 				m_DIS = null;
 			}
 		}
+	}
+
+	/**
+	 * Get the list of "tags" in the file
+	 *
+	 * @return the list of tags
+	 * @throws ParseException
+	 *             if a date could not be parsed successfully from the file
+	 * @throws IOException
+	 *             unable to read a portion of the file
+	 * @since Oct 27, 2016
+	 */
+	public List<Date> getDates() throws ParseException, IOException
+	{
+		/**
+		 * Tag names (dates) are dynamically read in and parsed once, on-the-fly
+		 */
+		if (m_Dates.isEmpty())
+		{
+			/**
+			 * It has been observed that the same tag name will appear multiple
+			 * times in a dataset
+			 */
+			final SortedMultiset<Date> dates = TreeMultiset.create();
+			/**
+			 * Start at the first grid tag location
+			 */
+			m_DIS.seek((int) m_GridStartByte);
+
+			/**
+			 * Read until EOF
+			 */
+			while (m_DIS.getPosition() < m_FileLength)
+			{
+				/**
+				 * Ensure that enough bytes exist to continue reading tag name
+				 */
+				if (m_DIS.getPosition()
+						+ GIOHeader.GRID_TAG_LENGTH >= m_FileLength)
+				{
+					break;
+				}
+				/**
+				 * Read tag and parse as date
+				 */
+				final String tag = new String(
+						m_DIS.readCharsAsAscii(GIOHeader.GRID_TAG_LENGTH))
+								.trim();
+				final Date date = m_DateFormat.parse(tag);
+				dates.add(date);
+				/**
+				 * Skip the data that follows the tag name
+				 */
+				final int skipBytes = (int) (m_GridSize
+						- GIOHeader.GRID_TAG_LENGTH);
+				if (m_DIS.skipBytes(skipBytes) < skipBytes)
+				{
+					break;
+				}
+			}
+
+			/**
+			 * Since multiple entries for the same date (tag name) may exist,
+			 * subdivide the milliseconds in that day by the count of
+			 * occurrences. E.g. if a tag appears twice, the first date will be
+			 * at midnight, the second will be at noon.
+			 */
+			final long dayMS = 1000 * 60 * 60 * 24;
+			for (final Date date : dates.elementSet())
+			{
+				final long count = dates.count(date);
+				final long addMS = dayMS / count;
+
+				for (long i = 0; i < count; i++)
+				{
+					m_Dates.add(new java.util.Date(date.getTime() + i * addMS));
+				}
+			}
+
+		}
+		return Collections.unmodifiableList(m_Dates);
 	}
 
 	/**
@@ -250,23 +384,6 @@ public final class GIOReader implements Closeable
 			final float sizeX = m_DIS.readFloat();
 			final float sizeY = m_DIS.readFloat();
 
-			final int[] xstart = new int[numRows];
-			final int[] xend = new int[numRows];
-			final int[] cumNodeCount = new int[numRows];
-
-			for (int i = 0; i < numRows; i++)
-			{
-				xstart[i] = m_DIS.readInt();
-			}
-			for (int i = 0; i < numRows; i++)
-			{
-				xend[i] = m_DIS.readInt();
-			}
-			for (int i = 0; i < numRows; i++)
-			{
-				cumNodeCount[i] = m_DIS.readInt();
-			}
-
 			try
 			{
 				m_Header = headerBuilder.withTitle(title).withNumRows(numRows)
@@ -279,11 +396,104 @@ public final class GIOReader implements Closeable
 						+ m_FilePath;
 				throw new IOException(message, e);
 			}
+
+			final List<Integer> config = IntStream.range(0, numRows * 3)
+					.map(this::readInt).boxed().collect(Collectors.toList());
+
+			/**
+			 * There might be "junk" data in this config. Adjust for this
+			 * possibility with some simple sanity checks.
+			 */
+			for (int i = 0; i < numRows - 1; i++)
+			{
+				final int xstart = config.get(i);
+				final int xend = config.get(i + numRows);
+				final int sumPrev = config.get(i + numRows * 2);
+				final int sum = config.get(i + numRows * 2 + 1);
+				if (xstart > xend || xend > numNodes)
+				{
+					config.remove(i + numRows);
+					config.add(readInt());
+					i--;
+				}
+				else if (sum != sumPrev + xend - xstart + 1)
+				{
+					config.remove(i + numRows * 2);
+					config.add(readInt());
+					i--;
+				}
+			}
+
+			int row = 0;
+			IntStream.range(numRows * row, numRows * (row + 1))
+					.forEach(x -> System.out
+							.print(String.format("%4d ", config.get(x))));
+			System.out.println();
+			row++;
+			IntStream.range(numRows * row, numRows * (row + 1))
+					.forEach(x -> System.out
+							.print(String.format("%4d ", config.get(x))));
+			System.out.println();
+			row++;
+			IntStream.range(numRows * row, numRows * (row + 1))
+					.forEach(x -> System.out
+							.print(String.format("%4d ", config.get(x))));
+			System.out.println();
+
+			m_GridSize = GIOHeader.GRID_TAG_LENGTH + numNodes * Float.BYTES;
+			m_GridStartByte = m_DIS.getPosition();
+			/**
+			 * Find the start of the first tag. Should be pretty close...
+			 */
+			for (int i = 0; i < 4; i++)
+			{
+				if (i > 0)
+				{
+					m_DIS.seek((int) m_GridStartByte);
+				}
+				final String tag = new String(
+						m_DIS.readCharsAsAscii(GIOHeader.GRID_TAG_LENGTH))
+								.trim();
+				try
+				{
+					m_DateFormat.parse(tag);
+					break;
+				}
+				catch (final ParseException e)
+				{
+					m_GridStartByte++;
+					continue;
+				}
+			}
 		}
 		catch (final Throwable t)
 		{
 			log.error("Error reading file.", t);
 			close();
+		}
+	}
+
+	/**
+	 * Reads an intenger from the input stream
+	 *
+	 * @param p_Anything
+	 *            ignore this parameter, used for streams
+	 * @return
+	 * @since Oct 27, 2016
+	 */
+	private <T> int readInt(
+			@SuppressWarnings("unchecked") final T... p_Anything)
+	{
+		try
+		{
+			return m_DIS.readInt();
+		}
+		catch (final IOException e)
+		{
+			final String message = String
+					.format("Unable to read from input file.");
+			log.error(message, e);
+			throw new RuntimeException(message, e);
 		}
 	}
 
