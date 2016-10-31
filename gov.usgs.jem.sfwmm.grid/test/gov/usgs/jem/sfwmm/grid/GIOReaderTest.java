@@ -139,6 +139,17 @@ public class GIOReaderTest
 
 	/**
 	 * Test method for
+	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#getNoDataValue()}.
+	 *
+	 */
+	@Test
+	public void testGetNoDataValue()
+	{
+		Assert.assertTrue(Float.isNaN(m_Reader.getNoDataValue()));
+	}
+
+	/**
+	 * Test method for
 	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#open(java.lang.String)}.
 	 */
 	@Test

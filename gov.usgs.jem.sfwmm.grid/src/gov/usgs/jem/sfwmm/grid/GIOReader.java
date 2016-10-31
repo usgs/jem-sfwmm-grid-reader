@@ -378,6 +378,18 @@ public final class GIOReader implements Closeable
 	}
 
 	/**
+	 * Get the no data value used by the dataset
+	 *
+	 * @return the no data value used
+	 * @since Oct 31, 2016
+	 */
+	@SuppressWarnings("static-method")
+	public Float getNoDataValue()
+	{
+		return Float.NaN;
+	}
+
+	/**
 	 * Read data from the file. If provided parameters are out of bounds, they
 	 * are silently correctly to be within the bounds of the dataset. This is to
 	 * facilitate the "all" range and unbounded ranges as valid arguments.

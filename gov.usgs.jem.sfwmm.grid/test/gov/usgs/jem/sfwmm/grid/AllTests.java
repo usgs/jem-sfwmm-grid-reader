@@ -58,7 +58,7 @@ public class AllTests
 	 */
 	public static final File getTestFile()
 	{
-		return new File("test/data/eomth_stage.bin").getAbsoluteFile();
+		return new File("test/data/eomth_stage.bin");
 	}
 
 	@BeforeClass
