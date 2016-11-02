@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>gov.usgs.jem.netcdf.iosp.sfwmm.grid.iosp.group</groupId>
-	<artifactId>gov.usgs.jem.netcdf.iosp.sfwmm.grid.iosp</artifactId>
+	<groupId>gov.usgs.jem.netcdf.iosp.sfwmm.grid.group</groupId>
+	<artifactId>gov.usgs.jem.netcdf.iosp.sfwmm.grid</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>${packaging.type}</packaging>
 	<name>JEM SFWMM Grid Reader NetCDF IOSP Library Plug-in</name>
@@ -144,9 +144,9 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.eclipse.scout.sdk.deps</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>${org.eclipse.core.version}</version>
+			<groupId>gov.usgs.jem.sfwmm.grid.group</groupId>
+			<artifactId>gov.usgs.jem.sfwmm.grid</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -164,19 +164,16 @@
 			<version>${org.junit.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.geotools.plugin</groupId>
-			<artifactId>org.geotools.plugin</artifactId>
-			<version>${org.geotools.plugin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.ucar.unidata.netcdf</groupId>
-			<artifactId>edu.ucar.unidata.netcdf</artifactId>
+			<groupId>edu.ucar</groupId>
+			<artifactId>cdm</artifactId>
 			<version>${edu.ucar.unidata.netcdf.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>gov.usgs.jem.cerp.netcdf</groupId>
-			<artifactId>gov.usgs.jem.cerp.netcdf</artifactId>
-			<version>${gov.usgs.jem.cerp.netcdf.version}</version>
-		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>unidata-releases</id>
+			<name>UNIDATA Releases</name>
+			<url>https://artifacts.unidata.ucar.edu/content/repositories/unidata-releases/</url>
+		</repository>
+	</repositories>
 </project>
