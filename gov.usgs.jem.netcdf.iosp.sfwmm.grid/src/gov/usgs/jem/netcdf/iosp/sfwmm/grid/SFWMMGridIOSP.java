@@ -52,13 +52,25 @@ import ucar.unidata.io.RandomAccessFile;
  */
 public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 {
+	/**
+	 * Used in helping determine output date indices
+	 *
+	 * @since Nov 2, 2016
+	 */
 	private static final Calendar					CALENDAR;
 
 	/**
+	 * Grid cell size, horizontal or vertical
+	 *
 	 * @since Oct 31, 2016
 	 */
 	private static float							CELL_SIZE_M		= 3218.69f;
 
+	/**
+	 * Used to format reference date string
+	 *
+	 * @since Nov 2, 2016
+	 */
 	private static final SimpleDateFormat			DATE_FORMATTER;
 
 	/**
@@ -74,21 +86,18 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 */
 	public static final String						TIME_VAR_NAME	= "time";
 
-	private static final TimeZone					TIME_ZONE;
-
 	static
 	{
-		TIME_ZONE = TimeZone.getTimeZone("UTC");
+		final TimeZone timeZone = TimeZone.getTimeZone("UTC");
 		DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");
-		DATE_FORMATTER.setTimeZone(TIME_ZONE);
+		DATE_FORMATTER.setTimeZone(timeZone);
 		CALENDAR = Calendar.getInstance();
-		CALENDAR.setTimeZone(TIME_ZONE);
+		CALENDAR.setTimeZone(timeZone);
 	}
 
 	/**
 	 * Takes in a Date List and a timestep and returns an int array that can be
 	 * written to a NetCDF file as time variable data.
-	 *
 	 *
 	 * @param p_Dates
 	 *            List of Date objects
@@ -96,7 +105,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 * @throws Exception
 	 */
 	private static int[] getDateIndexes(final List<Date> p_Dates,
-			final ChronoUnit chronoUnit)
+			final ChronoUnit p_ChronoUnit)
 	{
 		checkNotNull(p_Dates, "Dates cannot be null.");
 
@@ -108,7 +117,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			for (int i = 1; i < indexes.length; i++)
 			{
 				final Instant toInstant = p_Dates.get(i).toInstant();
-				final Long between = chronoUnit.between(refInstant, toInstant);
+				final Long between = p_ChronoUnit.between(refInstant,
+						toInstant);
 				indexes[i] = between.intValue();
 			}
 		}
@@ -116,7 +126,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		{
 			final Calendar cal = CALENDAR;
 			cal.setTime(p_Dates.get(0));
-			switch (chronoUnit)
+			switch (p_ChronoUnit)
 			{
 				case MONTHS:
 				{
@@ -261,12 +271,17 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	private int						m_SizeY;
 
 	/**
-	 * 'x', and 'y'
+	 * 't', 'y', and 'x'
 	 *
 	 * @since Oct 28, 2016
 	 */
 	private final List<Variable>	m_SupportingVariables;
 
+	/**
+	 * Time step used
+	 *
+	 * @since Nov 2, 2016
+	 */
 	private ChronoUnit				m_TimeStep;
 
 	{
@@ -275,7 +290,6 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	}
 
 	/**
-	 *
 	 * @since Oct 28, 2016
 	 */
 	public SFWMMGridIOSP()
@@ -332,6 +346,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		 * Build coords list - x
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeX });
+		// TODO
 		double currentX = 461000 + 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeX; i++)
 		{
@@ -354,6 +369,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		 * Build coords list - y, reverse order
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeY });
+		// TODO
 		double currentY = 2779000 + 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeY; i++)
 		{
@@ -477,9 +493,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 					new Attribute("units", String.format("%s since %s",
 							m_TimeStep.toString().toLowerCase(), DATE_FORMATTER
 									.format(refDate.getTime()).toString())));
-			ncfile.addVariableAttribute(tVariable,
-					new Attribute("_ChunkSizes",
-							Lists.newArrayList(tDimension.getLength())));
+			ncfile.addVariableAttribute(tVariable, new Attribute("_ChunkSizes",
+					Lists.newArrayList(tDimension.getLength())));
 		}
 		catch (final Exception e)
 		{

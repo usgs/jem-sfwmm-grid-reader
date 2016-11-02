@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JEM SFWMM Grid Reader NetCDF IOSP Library
+Bundle-Name: JEM SFWMM Grid Reader NetCDF IOSP
 Bundle-SymbolicName: gov.usgs.jem.netcdf.iosp.sfwmm.grid
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: USGS/JEM
