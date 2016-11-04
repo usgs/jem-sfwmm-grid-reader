@@ -1,5 +1,7 @@
 package gov.usgs.jem.sfwmm.grid.example;
 
+import static com.google.common.base.Preconditions.checkElementIndex;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -9,7 +11,6 @@ import org.apache.log4j.BasicConfigurator;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Range;
-import com.google.common.collect.Table;
 
 import gov.usgs.jem.sfwmm.grid.AllTests;
 import gov.usgs.jem.sfwmm.grid.GIOHeader;
@@ -46,76 +47,52 @@ public final class Main
 				log.info(String.format("Dates: %s (%s - %s)", dates.size(),
 						dates.get(0), Iterables.getLast(dates)));
 				{
-					final List<Table<Integer, Integer, Float>> data = reader
-							.readData(Range.singleton(0), Range.all(),
-									Range.all());
-					data.forEach(slice ->
-					{
-						for (int row = header.getRowsSize()
-								- 1; row >= 0; row--)
-						{
-							for (int col = 0; col < header.getColsSize(); col++)
-							{
-								final boolean contains = slice.contains(row,
-										col);
-								if (contains)
-								{
-									final Float value = slice.get(row, col);
-									if (!Float.isNaN(value))
-									{
-										System.out.print("*");
-									}
-									else
-									{
-										System.out.print(".");
-									}
+					final float[] data = reader.readData(Range.singleton(0),
+							Range.all(), Range.all());
 
-								}
-								else
-								{
-									System.out.print("_");
-								}
+					for (int row = header.getRowsSize() - 1; row >= 0; row--)
+					{
+						for (int col = 0; col < header.getColsSize(); col++)
+						{
+							final int index = row * header.getColsSize() + col;
+							checkElementIndex(index, data.length);
+							final Float value = data[index];
+							if (!Float.isNaN(value))
+							{
+								System.out.print("*");
 							}
-							System.out.println();
+							else
+							{
+								System.out.print(".");
+							}
+
 						}
-					});
+						System.out.println();
+					}
 				}
 				log.info("Day 1 values...");
 				{
-					final List<Table<Integer, Integer, Float>> data = reader
-							.readData(Range.singleton(0), Range.all(),
-									Range.all());
-					data.forEach(slice ->
+					final float[] data = reader.readData(Range.singleton(0),
+							Range.all(), Range.all());
+					for (int row = header.getRowsSize() - 1; row >= 0; row--)
 					{
-						for (int row = header.getRowsSize()
-								- 1; row >= 0; row--)
+						for (int col = 0; col < header.getColsSize(); col++)
 						{
-							for (int col = 0; col < header.getColsSize(); col++)
+							final int index = row * header.getColsSize() + col;
+							checkElementIndex(index, data.length);
+							final Float value = data[index];
+							if (!Float.isNaN(value))
 							{
-								final boolean contains = slice.contains(row,
-										col);
-								if (contains)
-								{
-									final Float value = slice.get(row, col);
-									if (!Float.isNaN(value))
-									{
-										System.out.print(String.format("%5.2f ",
-												slice.get(row, col)));
-									}
-									else
-									{
-										System.out.print("   . ");
-									}
-
-								}
-								else
-								{
-									System.out.print("   _ ");
-								}
+								System.out
+										.print(String.format("%5.2f ", value));
 							}
-							System.out.println();
+							else
+							{
+								System.out.print(" . ");
+							}
 						}
-					});
+						System.out.println();
+					}
 				}
 			}
 			catch (final Throwable t)
