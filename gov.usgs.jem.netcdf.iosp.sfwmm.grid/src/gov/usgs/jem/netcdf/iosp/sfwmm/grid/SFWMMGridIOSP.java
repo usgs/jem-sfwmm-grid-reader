@@ -51,6 +51,11 @@ import ucar.unidata.io.RandomAccessFile;
 public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 {
 	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								AXIS					= "axis";
+
+	/**
 	 * Used in helping determine output date indices
 	 *
 	 * @since Nov 2, 2016
@@ -62,7 +67,17 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 *
 	 * @since Oct 31, 2016
 	 */
-	private static float							CELL_SIZE_M		= 3218.69f;
+	private static float							CELL_SIZE_M				= 3218.69f;
+
+	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								CHUNK_SIZES				= "_ChunkSizes";
+
+	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								COORDINATE_AXIS_TYPE	= "_CoordinateAxisType";
 
 	/**
 	 * The type of data provided by this reader.
@@ -81,29 +96,44 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	/**
 	 * Class logger
 	 */
-	private static final org.apache.log4j.Logger	log				= org.apache.log4j.Logger
+	private static final org.apache.log4j.Logger	log						= org.apache.log4j.Logger
 			.getLogger(SFWMMGridIOSP.class);
+
+	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								LONG_NAME				= "long_name";
+
+	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								STANDARD_NAME			= "standard_name";
 
 	/**
 	 * The time variable name
 	 *
 	 * @since Oct 28, 2016
 	 */
-	static final String								TIME_VAR_NAME	= "time";
+	static final String								TIME_VAR_NAME			= "time";
+
+	/**
+	 * @since Nov 4, 2016
+	 */
+	static final String								UNITS					= "units";
 
 	/**
 	 * The horizontal coordinate variable name
 	 *
 	 * @since Nov 2, 2016
 	 */
-	static final String								X_VAR_NAME		= "x";
+	static final String								X_VAR_NAME				= "x";
 
 	/**
 	 * The vertical coordinate variable name
 	 *
 	 * @since Nov 2, 2016
 	 */
-	static final String								Y_VAR_NAME		= "y";
+	static final String								Y_VAR_NAME				= "y";
 
 	static
 	{
@@ -504,16 +534,16 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			tVariable = ncfile.addVariable(null, tDimension.getShortName(),
 					DataType.INT, tDimension.getShortName());
 			ncfile.addVariableAttribute(tVariable,
-					new Attribute("long_name", "time step"));
+					new Attribute(LONG_NAME, "time step"));
 			ncfile.addVariableAttribute(tVariable,
-					new Attribute("_CoordinateAxisType", "Time"));
-			ncfile.addVariableAttribute(tVariable, new Attribute("axis", "t"));
+					new Attribute(COORDINATE_AXIS_TYPE, "Time"));
+			ncfile.addVariableAttribute(tVariable, new Attribute(AXIS, "t"));
 			final Date refDate = dates.get(0);
 			ncfile.addVariableAttribute(tVariable,
-					new Attribute("units", String.format("%s since %s",
+					new Attribute(UNITS, String.format("%s since %s",
 							m_TimeStep.toString().toLowerCase(), DATE_FORMATTER
 									.format(refDate.getTime()).toString())));
-			ncfile.addVariableAttribute(tVariable, new Attribute("_ChunkSizes",
+			ncfile.addVariableAttribute(tVariable, new Attribute(CHUNK_SIZES,
 					Lists.newArrayList(tDimension.getLength())));
 		}
 		catch (final Exception e)
@@ -536,16 +566,16 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			yVariable = ncfile.addVariable(null, yDimension.getShortName(),
 					DataType.DOUBLE, yDimension.getShortName());
 			ncfile.addVariableAttribute(yVariable,
-					new Attribute("long_name", "y coordinate of projection"));
+					new Attribute(LONG_NAME, "y coordinate of projection"));
 			ncfile.addVariableAttribute(yVariable,
-					new Attribute("standard_name", "projection_y_coordinate"));
+					new Attribute(STANDARD_NAME, "projection_y_coordinate"));
 			ncfile.addVariableAttribute(yVariable,
-					new Attribute("_CoordinateAxisType", "GeoY"));
+					new Attribute(COORDINATE_AXIS_TYPE, "GeoY"));
 			ncfile.addVariableAttribute(yVariable,
-					new Attribute("axis", Y_VAR_NAME));
+					new Attribute(AXIS, Y_VAR_NAME));
 			ncfile.addVariableAttribute(yVariable,
-					new Attribute("units", coordinateUnitString));
-			ncfile.addVariableAttribute(yVariable, new Attribute("_ChunkSizes",
+					new Attribute(UNITS, coordinateUnitString));
+			ncfile.addVariableAttribute(yVariable, new Attribute(CHUNK_SIZES,
 					Lists.newArrayList(yDimension.getLength())));
 		}
 		catch (final Exception e)
@@ -566,16 +596,16 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			xVariable = ncfile.addVariable(null, xDimension.getShortName(),
 					DataType.DOUBLE, xDimension.getShortName());
 			ncfile.addVariableAttribute(xVariable,
-					new Attribute("long_name", "x coordinate of projection"));
+					new Attribute(LONG_NAME, "x coordinate of projection"));
 			ncfile.addVariableAttribute(xVariable,
-					new Attribute("standard_name", "projection_x_coordinate"));
+					new Attribute(STANDARD_NAME, "projection_x_coordinate"));
 			ncfile.addVariableAttribute(xVariable,
-					new Attribute("_CoordinateAxisType", "GeoX"));
+					new Attribute(COORDINATE_AXIS_TYPE, "GeoX"));
 			ncfile.addVariableAttribute(xVariable,
-					new Attribute("axis", X_VAR_NAME));
+					new Attribute(AXIS, X_VAR_NAME));
 			ncfile.addVariableAttribute(xVariable,
-					new Attribute("units", coordinateUnitString));
-			ncfile.addVariableAttribute(xVariable, new Attribute("_ChunkSizes",
+					new Attribute(UNITS, coordinateUnitString));
+			ncfile.addVariableAttribute(xVariable, new Attribute(CHUNK_SIZES,
 					Lists.newArrayList(xDimension.getLength())));
 		}
 		catch (final Exception e)
@@ -645,11 +675,11 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			dataVariable = ncfile.addVariable(null, m_DataVariableName,
 					DATA_TYPE, dimNames);
 			ncfile.addVariableAttribute(dataVariable,
-					new Attribute("long_name", dataVarLongName));
+					new Attribute(LONG_NAME, dataVarLongName));
+			ncfile.addVariableAttribute(dataVariable,
+					new Attribute(UNITS, dataVarUnits));
 			ncfile.addVariableAttribute(dataVariable,
 					new Attribute("coordinates", dimNames));
-			ncfile.addVariableAttribute(dataVariable,
-					new Attribute("units", dataVarUnits));
 			ncfile.addVariableAttribute(dataVariable,
 					new Attribute("_FillValue", m_NoDataValue));
 

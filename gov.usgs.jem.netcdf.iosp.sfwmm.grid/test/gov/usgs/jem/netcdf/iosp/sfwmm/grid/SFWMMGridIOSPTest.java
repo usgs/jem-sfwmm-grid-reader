@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -22,6 +21,7 @@ import com.google.common.io.Files;
 
 import ucar.ma2.IndexIterator;
 import ucar.ma2.InvalidRangeException;
+import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
@@ -75,6 +75,11 @@ public class SFWMMGridIOSPTest
 	/**
 	 * @since Oct 28, 2016
 	 */
+	private static final int	NUM_COLS	= 42;
+
+	/**
+	 * @since Oct 28, 2016
+	 */
 	private static final int	NUM_DATES	= 433;
 
 	/**
@@ -86,13 +91,6 @@ public class SFWMMGridIOSPTest
 	 * @since Oct 28, 2016
 	 */
 	private static final int	NUM_ROWS	= 65;
-
-	private static final Random	r;
-
-	static
-	{
-		r = new Random(System.currentTimeMillis());
-	}
 
 	/**
 	 * Create a new, empty {@link NetcdfFile} instance served by the
@@ -268,8 +266,6 @@ public class SFWMMGridIOSPTest
 					Assert.assertNotNull(v);
 					Assert.assertEquals(d.getLength(), v.getSize());
 
-					// TODO
-
 					if (coordVar.equals(SFWMMGridIOSP.TIME_VAR_NAME))
 					{
 						Assert.assertEquals(NUM_DATES, d.getLength());
@@ -278,9 +274,51 @@ public class SFWMMGridIOSPTest
 					{
 						Assert.assertEquals(NUM_ROWS, d.getLength());
 					}
+					else if (coordVar.equals(SFWMMGridIOSP.X_VAR_NAME))
+					{
+						Assert.assertEquals(NUM_COLS, d.getLength());
+					}
+
+					for (final String attr : new String[] {
+							SFWMMGridIOSP.COORDINATE_AXIS_TYPE,
+							SFWMMGridIOSP.LONG_NAME,
+							SFWMMGridIOSP.STANDARD_NAME, SFWMMGridIOSP.AXIS,
+							SFWMMGridIOSP.CHUNK_SIZES, SFWMMGridIOSP.UNITS })
+					{
+						if (coordVar.equals(SFWMMGridIOSP.TIME_VAR_NAME)
+								&& attr.equals(SFWMMGridIOSP.STANDARD_NAME))
+						{
+							continue;
+						}
+						final Attribute cat = v.findAttribute(attr);
+						Assert.assertNotNull(cat);
+						if (attr.equals(SFWMMGridIOSP.AXIS))
+						{
+							/**
+							 * Attribut contains first char of dimension name
+							 */
+							Assert.assertTrue(
+									cat.getStringValue().toLowerCase().contains(
+											d.getShortName().substring(0, 1)));
+						}
+						else if (attr.equals(SFWMMGridIOSP.CHUNK_SIZES)
+								|| attr.equals(SFWMMGridIOSP.UNITS))
+						{
+							continue;
+						}
+						else
+						{
+							/**
+							 * Attribute contains dimension name
+							 */
+							Assert.assertTrue(cat.getStringValue().toLowerCase()
+									.contains(d.getShortName()));
+						}
+					}
+
 				}
 
-				// TODO
+				Assert.assertNotNull(nc.findVariable("transverse_mercator"));
 			}
 		}
 		catch (final IOException e)
