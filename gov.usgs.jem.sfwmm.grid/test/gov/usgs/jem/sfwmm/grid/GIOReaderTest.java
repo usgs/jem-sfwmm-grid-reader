@@ -196,9 +196,9 @@ public class GIOReaderTest
 	@Test
 	public void testReadData() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> readData = m_Reader
+		final List<Table<Integer, Integer, Float>> values = m_Reader
 				.readData(Range.all(), Range.all(), Range.all());
-		final DoubleSummaryStatistics summaryStatistics = readData.stream()
+		final DoubleSummaryStatistics summaryStatistics = values.stream()
 				.map(Table::values).flatMap(Collection::stream)
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
@@ -218,10 +218,10 @@ public class GIOReaderTest
 	@Test
 	public void testReadData2() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> readData = m_Reader.readData(
+		final List<Table<Integer, Integer, Float>> values = m_Reader.readData(
 				Range.singleton(1), Range.singleton(NUM_ROWS - 1),
 				Range.singleton(23));
-		final DoubleSummaryStatistics summaryStatistics = readData.stream()
+		final DoubleSummaryStatistics summaryStatistics = values.stream()
 				.map(Table::values).flatMap(Collection::stream)
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
