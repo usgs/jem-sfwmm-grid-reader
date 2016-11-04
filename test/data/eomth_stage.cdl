@@ -1,0 +1,58 @@
+netcdf C:\Users\mckelvym\workspace\jem_sfwmm\gov.usgs.jem.netcdf.iosp.sfwmm.grid\..\test\data\eomth_stage.bin {
+  dimensions:
+    time = 433;
+    y = 65;
+    x = 42;
+  variables:
+    int time(time=433);
+      :long_name = "time step";
+      :_CoordinateAxisType = "Time";
+      :axis = "t";
+      :units = "days since 1965-01-01T00:00:00 +0000";
+      :_ChunkSizes = 433; // int
+
+    double y(y=65);
+      :long_name = "y coordinate of projection";
+      :standard_name = "projection_y_coordinate";
+      :_CoordinateAxisType = "GeoY";
+      :axis = "y";
+      :units = "m";
+      :_ChunkSizes = 65; // int
+
+    double x(x=42);
+      :long_name = "x coordinate of projection";
+      :standard_name = "projection_x_coordinate";
+      :_CoordinateAxisType = "GeoX";
+      :axis = "x";
+      :units = "m";
+      :_ChunkSizes = 42; // int
+
+    int transverse_mercator;
+      :_CoordinateAxisTypes = "GeoY GeoX";
+      :grid_mapping_name = "transverse_mercator";
+      :longitude_of_central_meridian = -81.0; // double
+      :latitude_of_projection_origin = 0.0; // double
+      :scale_factor_at_central_meridian = 0.9996; // double
+      :earth_radius = 6371229.0; // double
+      :false_easting = 500000.0; // double
+      :false_northing = 0.0; // double
+      :semi_major_axis = 6378137.0; // double
+      :semi_minor_axis = 6356752.314140356; // double
+
+    float eomth_stage(time=433, y=65, x=42);
+      :long_name = "eomth_stage eomth_stage";
+      :coordinates = "time y x";
+      :units = "";
+      :_FillValue = NaNf; // float
+      :esri_pe_string = "PROJCS[\"NAD83 / UTM zone 17N\",   GEOGCS[\"NAD83\",     DATUM[\"North American Datum 1983\",       SPHEROID[\"GRS 1980\", 6378137.0, 298.257222101, AUTHORITY[\"EPSG\",\"7019\"]],       TOWGS84[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],       AUTHORITY[\"EPSG\",\"6269\"]],     PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]],     UNIT[\"degree\", 0.017453292519943295],     AXIS[\"Geodetic longitude\", EAST],     AXIS[\"Geodetic latitude\", NORTH],     AUTHORITY[\"EPSG\",\"4269\"]],   PROJECTION[\"Transverse_Mercator\", AUTHORITY[\"EPSG\",\"9807\"]],   PARAMETER[\"central_meridian\", -81.0],   PARAMETER[\"latitude_of_origin\", 0.0],   PARAMETER[\"scale_factor\", 0.9996],   PARAMETER[\"false_easting\", 500000.0],   PARAMETER[\"false_northing\", 0.0],   UNIT[\"m\", 1.0],   AXIS[\"Easting\", EAST],   AXIS[\"Northing\", NORTH],   AUTHORITY[\"EPSG\",\"26917\"]]";
+      :grid_mapping = "transverse_mercator";
+
+  // global attributes:
+  :Metadata_Conventions = "Unidata Dataset Discovery v1.0";
+  :Conventions = "CF-1.6";
+  :cerp_version = "1.2";
+  :history = "Created Wed Nov 02 10:16:22 EDT 2016; eomth_stage.bin Thu Oct 27 15:29:10 EDT 2016";
+  :source = "gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP";
+  :comment = "JEM NetCDF SFWMMGridIOSP v1.0";
+  :author = "mckelvym on igsbaceblt13387";
+}
