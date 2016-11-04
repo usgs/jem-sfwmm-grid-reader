@@ -19,7 +19,7 @@ and related program material nor shall the fact of distribution
 constitute any such warranty, and no responsibility is assumed
 by the USGS in connection therewith.
 
-To compile this application, ensure you have the Java SDK installed and Maven. Use the Maven tool in the root of this project:
+To compile this application, ensure you have the Java SDK 8+ installed and Maven. Use the Maven tool in the root of this project:
 
 $ mvn install -P packaging-jar
 or 
@@ -48,3 +48,7 @@ Example Maven build:
 [INFO] Finished at: 2016-11-04T11:37:11-04:00
 [INFO] Final Memory: 23M/219M
 [INFO] ------------------------------------------------------------------------
+
+Usage:
+ - See Main.java in gov.usgs.jem.sfwmm.grid/example
+ - See Main.java in gov.usgs.jem.netcdf.iosp.sfwmm.grid/example
