@@ -418,30 +418,33 @@ public final class GIOReader implements Closeable
 		java.util.Objects.requireNonNull(p_ColumnIndices,
 				"Column index range required.");
 
-		final List<Date> dates = getDates();
+		/**
+		 * getDates will ensure tags are read first
+		 */
+		final List<Date> tsteps = getDates();
 		final GIOHeader header = getHeader();
 		final Range<Integer> dateIndices = formatRange(p_DateIndices, 0,
-				dates.size() - 1);
+				tsteps.size() - 1);
 		final int rowsSize = header.getRowsSize();
 		final Range<Integer> rows = formatRange(p_RowIndices, 0, rowsSize - 1);
 		final int colsSize = header.getColsSize();
 		final Range<Integer> cols = formatRange(p_ColumnIndices, 0,
 				colsSize - 1);
 
-		final int numTSteps = dateIndices.upperEndpoint()
+		final int thisTSteps = dateIndices.upperEndpoint()
 				- dateIndices.lowerEndpoint() + 1;
-		final int numRows = rows.upperEndpoint() - rows.lowerEndpoint() + 1;
-		final int numCols = cols.upperEndpoint() - cols.lowerEndpoint() + 1;
-		final float[] data = new float[numTSteps * numRows * numCols];
+		final int thisRows = rows.upperEndpoint() - rows.lowerEndpoint() + 1;
+		final int thisCols = cols.upperEndpoint() - cols.lowerEndpoint() + 1;
+		final float[] data = new float[thisTSteps * thisRows * thisCols];
 
 		/**
-		 * Skip to the start of data for the specific date index
+		 * Skip to the start of data for the specific tstep
 		 */
 		m_DIS.seek((int) (m_GridStartByte + GRID_TAG_LENGTH
 				+ m_GridSize * dateIndices.lowerEndpoint()));
 
 		int index = 0;
-		for (int tstep = 0; tstep < numTSteps; tstep++)
+		for (int tstep = 0; tstep < thisTSteps; tstep++)
 		{
 			/**
 			 * If the lower endpoint is not the first row, we need to move the
@@ -462,11 +465,16 @@ public final class GIOReader implements Closeable
 				}
 			}
 
-			for (int rIndex = 0; rIndex < numRows; rIndex++)
+			for (int rIndex = 0; rIndex < thisRows; rIndex++)
 			{
 				final Integer row = rIndex + rows.lowerEndpoint();
 				final Range<Integer> availableCols = m_AvailabilityMap.get(row);
 
+				/**
+				 * If the lower endpoint is after the start of data for this
+				 * row, we need to move the read pointer ahead in the file
+				 * accordingly.
+				 */
 				if (cols.lowerEndpoint() > availableCols.lowerEndpoint())
 				{
 					final int skipNodes = cols.lowerEndpoint()
@@ -474,12 +482,16 @@ public final class GIOReader implements Closeable
 					m_DIS.skipBytes(Float.BYTES * skipNodes);
 				}
 
-				for (int cIndex = 0; cIndex < numCols; cIndex++)
+				for (int cIndex = 0; cIndex < thisCols; cIndex++)
 				{
 					final Integer col = cIndex + cols.lowerEndpoint();
 					final boolean isAvailCol = availableCols.contains(col);
 
 					float value = Float.NaN;
+					/**
+					 * If this column falls within the range of data in the file
+					 * for this row, read it. Otherwise just use NaN
+					 */
 					if (isAvailCol)
 					{
 						value = m_DIS.readFloat();
@@ -487,6 +499,11 @@ public final class GIOReader implements Closeable
 					data[index++] = value;
 				}
 
+				/**
+				 * If the upper endpoint is before the end of data for this row,
+				 * we need to move the read pointer ahead in the file
+				 * accordingly.
+				 */
 				if (cols.upperEndpoint() < availableCols.upperEndpoint())
 				{
 					final int skipNodes = availableCols.upperEndpoint()
@@ -495,6 +512,10 @@ public final class GIOReader implements Closeable
 				}
 			}
 
+			/**
+			 * If the upper endpoint is not the last row, we need to move the
+			 * read pointer ahead in the file accordingly.
+			 */
 			if (rows.upperEndpoint() < rowsSize - 1)
 			{
 				for (Integer row = rows.upperEndpoint()
