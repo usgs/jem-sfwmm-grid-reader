@@ -29,3 +29,22 @@ External dependencies:
  * See project pom.xml files, all dependencies are Maven projects
 
 Example Maven build:
+[INFO] ------------------------------------------------------------------------
+[INFO] Building JEM SFWMM Grid Reader Parent 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO]
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ parent ---
+[INFO] Installing C:\Users\mckelvym\workspace\jem_sfwmm\pom.xml to C:\Users\mckelvym\.m2\repository\gov\usgs\jem\sfwmm\grid\group\parent\1.0.0-SNAPSHOT\parent-1.0.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO]
+[INFO] JEM SFWMM Grid Reader Library Plug-in .............. SUCCESS [  4.668 s]
+[INFO] JEM SFWMM Grid Reader NetCDF IOSP Plug-in .......... SUCCESS [  2.523 s]
+[INFO] JEM SFWMM Grid Reader Parent ....................... SUCCESS [  0.031 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 8.444 s
+[INFO] Finished at: 2016-11-04T11:37:11-04:00
+[INFO] Final Memory: 23M/219M
+[INFO] ------------------------------------------------------------------------
