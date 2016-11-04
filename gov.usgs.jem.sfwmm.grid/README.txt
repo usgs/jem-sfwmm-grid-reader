@@ -33,4 +33,4 @@ JavaDocs can be generated with the following command:
 $ mvn javadoc:javadoc -P packaging-jar
 
 Usage:
-See examples/gov.usgs.jem.sfwmm.grid.example.Main
+ - See Main.java in gov.usgs.jem.sfwmm.grid/example
