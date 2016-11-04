@@ -84,7 +84,21 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 *
 	 * @since Oct 28, 2016
 	 */
-	public static final String						TIME_VAR_NAME	= "time";
+	static final String								TIME_VAR_NAME	= "time";
+
+	/**
+	 * The horizontal coordinate variable name
+	 *
+	 * @since Nov 2, 2016
+	 */
+	static final String								X_VAR_NAME		= "x";
+
+	/**
+	 * The vertical coordinate variable name
+	 *
+	 * @since Nov 2, 2016
+	 */
+	static final String								Y_VAR_NAME		= "y";
 
 	static
 	{
@@ -512,7 +526,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		try
 		{
 			final Dimension yDimension = ncfile.addDimension(null,
-					new Dimension("y", m_SizeY));
+					new Dimension(Y_VAR_NAME, m_SizeY));
 			yVariable = ncfile.addVariable(null, yDimension.getShortName(),
 					DataType.DOUBLE, yDimension.getShortName());
 			ncfile.addVariableAttribute(yVariable,
@@ -521,7 +535,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 					new Attribute("standard_name", "projection_y_coordinate"));
 			ncfile.addVariableAttribute(yVariable,
 					new Attribute("_CoordinateAxisType", "GeoY"));
-			ncfile.addVariableAttribute(yVariable, new Attribute("axis", "y"));
+			ncfile.addVariableAttribute(yVariable,
+					new Attribute("axis", Y_VAR_NAME));
 			ncfile.addVariableAttribute(yVariable,
 					new Attribute("units", coordinateUnitString));
 			ncfile.addVariableAttribute(yVariable, new Attribute("_ChunkSizes",
@@ -541,7 +556,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		try
 		{
 			final Dimension xDimension = ncfile.addDimension(null,
-					new Dimension("x", m_SizeX));
+					new Dimension(X_VAR_NAME, m_SizeX));
 			xVariable = ncfile.addVariable(null, xDimension.getShortName(),
 					DataType.DOUBLE, xDimension.getShortName());
 			ncfile.addVariableAttribute(xVariable,
@@ -550,7 +565,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 					new Attribute("standard_name", "projection_x_coordinate"));
 			ncfile.addVariableAttribute(xVariable,
 					new Attribute("_CoordinateAxisType", "GeoX"));
-			ncfile.addVariableAttribute(xVariable, new Attribute("axis", "x"));
+			ncfile.addVariableAttribute(xVariable,
+					new Attribute("axis", X_VAR_NAME));
 			ncfile.addVariableAttribute(xVariable,
 					new Attribute("units", coordinateUnitString));
 			ncfile.addVariableAttribute(xVariable, new Attribute("_ChunkSizes",
@@ -695,11 +711,11 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			if (m_SupportingVariables.contains(p_Variable))
 			{
 				Array cacheData = null;
-				if (shortName.equals("y"))
+				if (shortName.equals(Y_VAR_NAME))
 				{
 					cacheData = createYArray();
 				}
-				else if (shortName.equals("x"))
+				else if (shortName.equals(X_VAR_NAME))
 				{
 					cacheData = createXArray();
 				}
