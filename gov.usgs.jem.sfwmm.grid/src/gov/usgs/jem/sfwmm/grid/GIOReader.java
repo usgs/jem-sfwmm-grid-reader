@@ -22,12 +22,10 @@ import org.apache.log4j.Level;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.BoundType;
-import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
 import com.google.common.collect.SortedMultiset;
-import com.google.common.collect.Table;
 import com.google.common.collect.TreeMultiset;
 import com.google.common.io.Files;
 
@@ -391,7 +389,7 @@ public final class GIOReader implements Closeable
 
 	/**
 	 * Read data from the file. If provided parameters are out of bounds, they
-	 * are silently correctly to be within the bounds of the dataset. This is to
+	 * are silently corrected to be within the bounds of the dataset. This is to
 	 * facilitate the "all" range and unbounded ranges as valid arguments.
 	 *
 	 * @param p_DateIndices
@@ -408,8 +406,7 @@ public final class GIOReader implements Closeable
 	 * @throws ParseException
 	 * @since Oct 28, 2016
 	 */
-	public List<Table<Integer, Integer, Float>> readData(
-			final Range<Integer> p_DateIndices,
+	public float[] readData(final Range<Integer> p_DateIndices,
 			final Range<Integer> p_RowIndices,
 			final Range<Integer> p_ColumnIndices)
 			throws ParseException, IOException
@@ -435,60 +432,82 @@ public final class GIOReader implements Closeable
 				- dateIndices.lowerEndpoint() + 1;
 		final int numRows = rows.upperEndpoint() - rows.lowerEndpoint() + 1;
 		final int numCols = cols.upperEndpoint() - cols.lowerEndpoint() + 1;
-		final List<Table<Integer, Integer, Float>> data = Lists
-				.newArrayListWithCapacity(numTSteps);
+		final float[] data = new float[numTSteps * numRows * numCols];
 
 		/**
 		 * Skip to the start of data for the specific date index
 		 */
 		m_DIS.seek((int) (m_GridStartByte + GRID_TAG_LENGTH
 				+ m_GridSize * dateIndices.lowerEndpoint()));
-		for (Integer tagIndex = dateIndices
-				.lowerEndpoint(); tagIndex <= dateIndices
-						.upperEndpoint(); tagIndex++)
-		{
-			final Table<Integer, Integer, Float> slice = HashBasedTable
-					.create(numRows, numCols);
-			data.add(slice);
-			for (Integer rowIndex = 0; rowIndex < rowsSize; rowIndex++)
-			{
-				final Range<Integer> availableCols = m_AvailabilityMap
-						.get(rowIndex);
-				final boolean isUserRow = rows.contains(rowIndex);
 
-				if (!isUserRow)
+		int index = 0;
+		for (int tstep = 0; tstep < numTSteps; tstep++)
+		{
+			/**
+			 * If the lower endpoint is not the first row, we need to move the
+			 * read pointer ahead in the file accordingly.
+			 */
+			if (rows.lowerEndpoint() > 0)
+			{
+				for (Integer row = 0; row < rows.lowerEndpoint(); row++)
 				{
+					/**
+					 * Determine how many nodes really need to be skipped.
+					 */
+					final Range<Integer> availableCols = m_AvailabilityMap
+							.get(row);
 					final int skipNodes = availableCols.upperEndpoint()
 							- availableCols.lowerEndpoint() + 1;
 					m_DIS.skipBytes(Float.BYTES * skipNodes);
-					continue;
+				}
+			}
+
+			for (int rIndex = 0; rIndex < numRows; rIndex++)
+			{
+				final Integer row = rIndex + rows.lowerEndpoint();
+				final Range<Integer> availableCols = m_AvailabilityMap.get(row);
+
+				if (cols.lowerEndpoint() > availableCols.lowerEndpoint())
+				{
+					final int skipNodes = cols.lowerEndpoint()
+							- availableCols.lowerEndpoint();
+					m_DIS.skipBytes(Float.BYTES * skipNodes);
 				}
 
-				for (Integer colIndex = 0; colIndex < colsSize; colIndex++)
+				for (int cIndex = 0; cIndex < numCols; cIndex++)
 				{
-					final boolean isUserCol = cols.contains(colIndex);
-					final boolean isAvailCol = availableCols.contains(colIndex);
+					final Integer col = cIndex + cols.lowerEndpoint();
+					final boolean isAvailCol = availableCols.contains(col);
 
-					if (isUserCol && isAvailCol)
+					float value = Float.NaN;
+					if (isAvailCol)
 					{
-						final Float value = m_DIS.readFloat();
-						slice.put(rowIndex, colIndex, value);
+						value = m_DIS.readFloat();
 					}
-					else if (isUserCol && !isAvailCol)
-					{
-						slice.put(rowIndex, colIndex, Float.NaN);
-					}
-					else if (!isUserCol && isAvailCol)
-					{
-						m_DIS.skipBytes(Float.BYTES);
-					}
-					else
-					// (!isUserCol && !isAvailCol)
-					{
-						/**
-						 * Do nothing
-						 */
-					}
+					data[index++] = value;
+				}
+
+				if (cols.upperEndpoint() < availableCols.upperEndpoint())
+				{
+					final int skipNodes = availableCols.upperEndpoint()
+							- cols.upperEndpoint();
+					m_DIS.skipBytes(Float.BYTES * skipNodes);
+				}
+			}
+
+			if (rows.upperEndpoint() < rowsSize - 1)
+			{
+				for (Integer row = rows.upperEndpoint()
+						+ 1; row < rowsSize; row++)
+				{
+					/**
+					 * Determine how many nodes really need to be skipped.
+					 */
+					final Range<Integer> availableCols = m_AvailabilityMap
+							.get(row);
+					final int skipNodes = availableCols.upperEndpoint()
+							- availableCols.lowerEndpoint() + 1;
+					m_DIS.skipBytes(Float.BYTES * skipNodes);
 				}
 			}
 
@@ -610,7 +629,7 @@ public final class GIOReader implements Closeable
 			{
 				if (i > 0)
 				{
-					m_DIS.seek((int) m_GridStartByte);
+					m_DIS.skipBytes(1);
 				}
 				final String tag = new String(
 						m_DIS.readCharsAsAscii(GRID_TAG_LENGTH)).trim();

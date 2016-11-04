@@ -2,10 +2,11 @@ package gov.usgs.jem.sfwmm.grid;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -14,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.common.collect.Range;
-import com.google.common.collect.Table;
 
 /**
  * Tests {@link GIOReader}
@@ -51,6 +51,21 @@ public class GIOReaderTest
 		final Class<?> classToTest = GIOReader.class;
 		final Class<?> testingClass = GIOReaderTest.class;
 		AllTests.assertHasRequiredMethods(classToTest, testingClass);
+	}
+
+	/**
+	 * Unpacks the values in the provided array as a {@link Stream} of
+	 * {@link Float}
+	 *
+	 * @param p_Values
+	 *            the values
+	 * @return a {@link Stream} of {@link Float}
+	 * @since Nov 4, 2016
+	 */
+	private static Stream<Float> toStream(final float[] p_Values)
+	{
+		return IntStream.range(0, p_Values.length)
+				.mapToObj(i -> (Float) p_Values[i]);
 	}
 
 	private GIOReader m_Reader;
@@ -196,10 +211,9 @@ public class GIOReaderTest
 	@Test
 	public void testReadData() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> values = m_Reader
-				.readData(Range.all(), Range.all(), Range.all());
-		final DoubleSummaryStatistics summaryStatistics = values.stream()
-				.map(Table::values).flatMap(Collection::stream)
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.all(), Range.all(), Range.all()));
+		final DoubleSummaryStatistics summaryStatistics = values
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
 		Assert.assertEquals(NUM_NODES,
@@ -218,11 +232,10 @@ public class GIOReaderTest
 	@Test
 	public void testReadData2() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> values = m_Reader.readData(
-				Range.singleton(1), Range.singleton(NUM_ROWS - 1),
-				Range.singleton(23));
-		final DoubleSummaryStatistics summaryStatistics = values.stream()
-				.map(Table::values).flatMap(Collection::stream)
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.singleton(1),
+						Range.singleton(NUM_ROWS - 1), Range.singleton(23)));
+		final DoubleSummaryStatistics summaryStatistics = values
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
 		Assert.assertEquals(1, summaryStatistics.getCount());
@@ -239,11 +252,10 @@ public class GIOReaderTest
 	@Test
 	public void testReadData3() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> readData = m_Reader.readData(
-				Range.singleton(1), Range.singleton(NUM_ROWS - 1),
-				Range.atMost(23));
-		final DoubleSummaryStatistics summaryStatistics = readData.stream()
-				.map(Table::values).flatMap(Collection::stream)
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.singleton(1),
+						Range.singleton(NUM_ROWS - 1), Range.atMost(23)));
+		final DoubleSummaryStatistics summaryStatistics = values
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
 		Assert.assertEquals(1, summaryStatistics.getCount());
@@ -260,13 +272,75 @@ public class GIOReaderTest
 	@Test
 	public void testReadData4() throws IOException, ParseException
 	{
-		final List<Table<Integer, Integer, Float>> readData = m_Reader.readData(
-				Range.atMost(0), Range.atLeast(NUM_ROWS - 1), Range.atMost(23));
-		final DoubleSummaryStatistics summaryStatistics = readData.stream()
-				.map(Table::values).flatMap(Collection::stream)
+		final Stream<Float> values = toStream(m_Reader.readData(Range.atMost(0),
+				Range.atLeast(NUM_ROWS - 1), Range.atMost(23)));
+		final DoubleSummaryStatistics summaryStatistics = values
 				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
 				.summaryStatistics();
 		Assert.assertEquals(1, summaryStatistics.getCount());
 		Assert.assertEquals(13.72564f, summaryStatistics.getAverage(), 0.00001);
+	}
+
+	/**
+	 * Test method for
+	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 *
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Test
+	public void testReadData5() throws IOException, ParseException
+	{
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.closed(0, 1),
+						Range.singleton(NUM_ROWS - 1), Range.singleton(23)));
+		final DoubleSummaryStatistics summaryStatistics = values
+				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
+				.summaryStatistics();
+		Assert.assertEquals(2, summaryStatistics.getCount());
+		Assert.assertEquals(13.760555f, summaryStatistics.getAverage(),
+				0.00001);
+	}
+
+	/**
+	 * Test method for
+	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 *
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Test
+	public void testReadData6() throws IOException, ParseException
+	{
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.singleton(0),
+						Range.singleton(NUM_ROWS - 1), Range.singleton(29)));
+		final DoubleSummaryStatistics summaryStatistics = values
+				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
+				.summaryStatistics();
+		Assert.assertEquals(1, summaryStatistics.getCount());
+		Assert.assertEquals(25.337408f, summaryStatistics.getAverage(),
+				0.00001);
+	}
+
+	/**
+	 * Test method for
+	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#readData(com.google.common.collect.Range, com.google.common.collect.Range, com.google.common.collect.Range)}.
+	 *
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Test
+	public void testReadData7() throws IOException, ParseException
+	{
+		final Stream<Float> values = toStream(
+				m_Reader.readData(Range.closed(0, 1),
+						Range.singleton(NUM_ROWS - 2), Range.singleton(28)));
+		final DoubleSummaryStatistics summaryStatistics = values
+				.filter(v -> !Float.isNaN(v)).mapToDouble(Float::doubleValue)
+				.summaryStatistics();
+		Assert.assertEquals(2, summaryStatistics.getCount());
+		Assert.assertEquals(24.3613235f, summaryStatistics.getAverage(),
+				0.00001);
 	}
 }

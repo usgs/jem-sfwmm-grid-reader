@@ -25,13 +25,11 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Table;
 import com.google.common.io.Files;
 
 import gov.usgs.jem.sfwmm.grid.GIOReader;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
-import ucar.ma2.Index;
 import ucar.ma2.InvalidRangeException;
 import ucar.ma2.Section;
 import ucar.nc2.Attribute;
@@ -65,6 +63,13 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 * @since Oct 31, 2016
 	 */
 	private static float							CELL_SIZE_M		= 3218.69f;
+
+	/**
+	 * The type of data provided by this reader.
+	 *
+	 * @since Nov 4, 2016
+	 */
+	private static final DataType					DATA_TYPE;
 
 	/**
 	 * Used to format reference date string
@@ -107,6 +112,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		DATE_FORMATTER.setTimeZone(timeZone);
 		CALENDAR = Calendar.getInstance();
 		CALENDAR.setTimeZone(timeZone);
+		DATA_TYPE = DataType.FLOAT;
 	}
 
 	/**
@@ -637,7 +643,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 					.collect(Collectors.joining(" "));
 
 			dataVariable = ncfile.addVariable(null, m_DataVariableName,
-					DataType.FLOAT, dimNames);
+					DATA_TYPE, dimNames);
 			ncfile.addVariableAttribute(dataVariable,
 					new Attribute("long_name", dataVarLongName));
 			ncfile.addVariableAttribute(dataVariable,
@@ -762,8 +768,6 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 						? new Section(new int[] { m_SizeT, m_SizeY, m_SizeX })
 						: p_Section;
 
-				final Array data = Array.factory(DataType.FLOAT,
-						section.getShape());
 				final int tOrigin = section.getOrigin(0);
 				final int yOrigin = section.getOrigin(1);
 				final int xOrigin = section.getOrigin(2);
@@ -773,26 +777,17 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 
 				try
 				{
-					final List<Table<Integer, Integer, Float>> readData = m_Reader
-							.readData(
-									Range.closedOpen(tOrigin, tOrigin + tSize),
-									Range.closedOpen(yOrigin, yOrigin + ySize),
-									Range.closedOpen(xOrigin, xOrigin + xSize));
-					final Index index = data.getIndex();
-					for (int tIndex = 0; tIndex < tSize; tIndex++)
-					{
-						final Table<Integer, Integer, Float> yxTable = readData
-								.get(tIndex);
-						for (int yIndex = 0; yIndex < ySize; yIndex++)
-						{
-							for (int xIndex = 0; xIndex < xSize; xIndex++)
-							{
-								data.setFloat(index.set(tIndex, yIndex, xIndex),
-										yxTable.get(yIndex + yOrigin,
-												xIndex + xOrigin));
-							}
-						}
-					}
+					final Range<Integer> tRange = Range.closedOpen(tOrigin,
+							tOrigin + tSize);
+					final Range<Integer> yRange = Range.closedOpen(yOrigin,
+							yOrigin + ySize);
+					final Range<Integer> xRange = Range.closedOpen(xOrigin,
+							xOrigin + xSize);
+					final float[] readData = m_Reader.readData(tRange, yRange,
+							xRange);
+					final Array data = Array.factory(DATA_TYPE,
+							section.getShape(), readData);
+					return data;
 				}
 				catch (final ParseException e)
 				{
@@ -801,8 +796,6 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 					close();
 					throw new IOException(e);
 				}
-
-				return data;
 			}
 		}
 
