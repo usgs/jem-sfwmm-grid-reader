@@ -7,7 +7,7 @@
 	<groupId>gov.usgs.jem.sfwmm.grid.group</groupId>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
-	<name>JEM SFWMM Grid Reader Parent</name>
+	<name>SFWMM Grid Reader Parent</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

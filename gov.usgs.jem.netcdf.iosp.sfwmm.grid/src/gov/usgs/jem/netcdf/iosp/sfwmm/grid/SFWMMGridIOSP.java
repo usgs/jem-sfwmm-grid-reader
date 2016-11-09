@@ -391,13 +391,24 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 */
 	private Array createXArray()
 	{
+		/**
+		 * http://sofia.usgs.gov/metadata/sflwww/bales.faq.html
+		 *
+		 * West_Bounding_Coordinate: -81.4 East_Bounding_Coordinate: -80
+		 * North_Bounding_Coordinate: 28.2 South_Bounding_Coordinate: 25.1
+		 *
+		 * The NSM was developed directly from the South Florida Water
+		 * Management Model (SFWMM)
+		 */
+
 		Array cacheData;
 		/**
 		 * Build coords list - x
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeX });
-		// TODO
-		double currentX = 461000 + 0.5 * CELL_SIZE_M;
+		// TODO 3218.69f
+
+		double currentX = 459668.64 + 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeX; i++)
 		{
 			cacheData.setObject(i, currentX);
@@ -420,7 +431,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeY });
 		// TODO
-		double currentY = 2779000 + 0.5 * CELL_SIZE_M;
+		double currentY = 2776080.40 + 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeY; i++)
 		{
 			cacheData.setObject(i, currentY);
@@ -661,9 +672,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			throw new IOException(message, e);
 		}
 
-		final String dataVarLongName = String.format("%s %s",
-				Files.getNameWithoutExtension(m_File.getName()),
-				m_DataVariableName);
+		final String dataVarLongName = m_DataVariableName;
 		final String dataVarUnits = "";
 		Variable dataVariable = null;
 		try
