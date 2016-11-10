@@ -408,7 +408,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		cacheData = Array.factory(double.class, new int[] { m_SizeX });
 		// TODO 3218.69f
 
-		double currentX = 459668.64 + 0.5 * CELL_SIZE_M;
+		double currentX = 465000 + 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeX; i++)
 		{
 			cacheData.setObject(i, currentX);
@@ -431,12 +431,19 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeY });
 		// TODO
-		double currentY = 2776080.40 + 0.5 * CELL_SIZE_M;
+		double currentY = 2989000.0 - 0.5 * CELL_SIZE_M;
 		for (int i = 0; i < m_SizeY; i++)
 		{
 			cacheData.setObject(i, currentY);
-			currentY += CELL_SIZE_M;
+			currentY -= CELL_SIZE_M;
 		}
+
+		// double currentY = 2776080.40 + 0.5 * CELL_SIZE_M;
+		// for (int i = 0; i < m_SizeY; i++)
+		// {
+		// cacheData.setObject(i, currentY);
+		// currentY += CELL_SIZE_M;
+		// }
 		return cacheData;
 	}
 
@@ -826,7 +833,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 							xRange);
 					final Array data = Array.factory(DATA_TYPE,
 							section.getShape(), readData);
-					return data;
+					return data.flip(1);
 				}
 				catch (final ParseException e)
 				{
