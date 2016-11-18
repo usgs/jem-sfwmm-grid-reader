@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
@@ -392,28 +393,19 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	private Array createXArray()
 	{
 		/**
-		 * http://sofia.usgs.gov/metadata/sflwww/bales.faq.html
+		 * south and west bounding coordinates (25.133890, -81.330940 lat-lon)
 		 *
-		 * West_Bounding_Coordinate: -81.4 East_Bounding_Coordinate: -80
-		 * North_Bounding_Coordinate: 28.2 South_Bounding_Coordinate: 25.1
-		 *
-		 * The NSM was developed directly from the South Florida Water
-		 * Management Model (SFWMM)
+		 * 466641.10, 2779814.25
 		 */
-
 		Array cacheData;
 		/**
 		 * Build coords list - x
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeX });
-		// TODO 3218.69f
+		final double refX = 466641.10;
+		IntStream.range(0, m_SizeX)
+				.forEach(i -> cacheData.setObject(i, refX + i * CELL_SIZE_M));
 
-		double currentX = 465000 + 0.5 * CELL_SIZE_M;
-		for (int i = 0; i < m_SizeX; i++)
-		{
-			cacheData.setObject(i, currentX);
-			currentX += CELL_SIZE_M;
-		}
 		return cacheData;
 	}
 
@@ -425,25 +417,21 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 */
 	private Array createYArray()
 	{
+		/**
+		 * south and west bounding coordinates (25.133890, -81.330940 lat-lon)
+		 *
+		 * 466641.10, 2779814.25
+		 */
 		Array cacheData;
 		/**
 		 * Build coords list - y, reverse order
 		 */
 		cacheData = Array.factory(double.class, new int[] { m_SizeY });
-		// TODO
-		double currentY = 2989000.0 - 0.5 * CELL_SIZE_M;
-		for (int i = 0; i < m_SizeY; i++)
-		{
-			cacheData.setObject(i, currentY);
-			currentY -= CELL_SIZE_M;
-		}
+		final double refY = 2779814.25 + (m_SizeY - 1) * CELL_SIZE_M
+				+ 0.5 * CELL_SIZE_M;
+		IntStream.range(0, m_SizeY)
+				.forEach(i -> cacheData.setObject(i, refY - i * CELL_SIZE_M));
 
-		// double currentY = 2776080.40 + 0.5 * CELL_SIZE_M;
-		// for (int i = 0; i < m_SizeY; i++)
-		// {
-		// cacheData.setObject(i, currentY);
-		// currentY += CELL_SIZE_M;
-		// }
 		return cacheData;
 	}
 
