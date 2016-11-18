@@ -20,9 +20,16 @@ constitute any such warranty, and no responsibility is assumed
 by the USGS in connection therewith.  This software is provisional.
 
 To compile this application, ensure you have the Java SDK 8+ installed and Maven. Use the Maven tool in the root of this project:
+ * http://www.oracle.com/technetwork/java/javase/downloads/index.html
+ * https://maven.apache.org/
+ 
+To compile standard jar dependencies and run unit tests:
+$ mvn install
 
+To explicitly use standard jar packaging use:
 $ mvn install -P packaging-jar
-or 
+
+To compile for Eclipse-based applications using Tycho, use: 
 $ mvn install -P packaging-eclipse
 
 External dependencies:
