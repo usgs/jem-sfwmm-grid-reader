@@ -13,9 +13,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import gov.usgs.jem.sfwmm.grid.SeekableDataFileInputStream;
-import gov.usgs.jem.sfwmm.grid.SeekableDataFileInputStreamImpl;
-
 /**
  * Tests {@link SeekableDataFileInputStreamImpl}
  *
@@ -404,7 +401,12 @@ public class SeekableDataFileInputStreamImplTest
 			final String readLine = m_Input.readLine();
 			Assert.assertTrue(
 					readLine.startsWith("OPTB2 - CERP with LORS2008"));
-			Assert.assertEquals(readLine.length(), m_Input.getPosition());
+			Assert.assertTrue(!readLine.isEmpty());
+			/**
+			 * Due to different OS line endings, the actual string length may be
+			 * less than the number of bytes read.
+			 */
+			Assert.assertTrue(readLine.length() <= m_Input.getPosition());
 		}
 		catch (final UnsupportedOperationException e)
 		{
