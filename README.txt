@@ -32,6 +32,10 @@ $ mvn install -P packaging-jar
 To compile for Eclipse-based applications using Tycho, use: 
 $ mvn install -P packaging-eclipse
 
+JavaDocs can be generated with the following command:
+
+$ mvn javadoc:javadoc -P packaging-jar
+
 External dependencies:
  * See project pom.xml files, all dependencies are Maven projects
 
