@@ -403,7 +403,9 @@ public final class GIOReader implements Closeable
 	 *         corresponding float value. If there is not a corresponding valid
 	 *         value in the dataset, then NaN is used in its place.
 	 * @throws IOException
+	 *             problem reading from file
 	 * @throws ParseException
+	 *             problem parsing dates
 	 * @since Oct 28, 2016
 	 */
 	public float[] readData(final Range<Integer> p_DateIndices,
@@ -678,7 +680,10 @@ public final class GIOReader implements Closeable
 	 *
 	 * @param p_Anything
 	 *            ignore this parameter, used for streams
-	 * @return
+	 * @return reads an integer from the {@link #m_DIS}
+	 * @param <T>
+	 *            any object type, parameter added so that function reference
+	 *            can be used for streams
 	 * @since Oct 27, 2016
 	 */
 	private <T> int readInt(

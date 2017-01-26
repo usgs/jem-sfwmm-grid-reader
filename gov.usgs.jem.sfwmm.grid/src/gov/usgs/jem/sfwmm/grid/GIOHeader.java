@@ -93,7 +93,7 @@ public final class GIOHeader
 		 *            the node horizontal size
 		 * @param p_Y
 		 *            the node vertical size
-		 * @return
+		 * @return this builder
 		 * @since Oct 25, 2016
 		 */
 		public Builder withSize(final float p_X, final float p_Y)
