@@ -42,8 +42,8 @@ import ucar.nc2.util.CancelTask;
 import ucar.unidata.io.RandomAccessFile;
 
 /**
- * The SFWMM GridIO header structure. Use {@link #builder()} to construct a new
- * instance.
+ * The SFWMM GridIO IO service provider implementation to have this class be
+ * read using the UCAR NetCDF CDM (Common Data Model)
  *
  * @author mckelvym
  * @since Oct 28, 2016
@@ -152,8 +152,10 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 *
 	 * @param p_Dates
 	 *            List of Date objects
+	 * @param p_ChronoUnit
+	 *            The {@link ChronoUnit} to use when parsing date indices to
+	 *            dates
 	 * @return Array of int containing offsets from first date in p_Dates
-	 * @throws Exception
 	 */
 	private static int[] getDateIndexes(final List<Date> p_Dates,
 			final ChronoUnit p_ChronoUnit)
@@ -372,7 +374,9 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 *
 	 * @return the new array
 	 * @throws IOException
+	 *             if problem reading from file
 	 * @throws ParseException
+	 *             if unable to parse date
 	 * @since Oct 31, 2016
 	 */
 	private Array createTArray() throws ParseException, IOException
