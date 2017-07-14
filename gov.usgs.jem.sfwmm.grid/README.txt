@@ -1,6 +1,6 @@
 JEM SFWMM Grid Reader Library
 Joint Ecosystem Modeling (JEM)
-http://jem.usgs.gov
+https://jem.gov/
 JEM is a partnership among federal agencies (USGS/USFWS/NPS/USACE), universities and other organizations.
 
 DISCLAIMER

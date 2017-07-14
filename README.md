@@ -1,6 +1,6 @@
 # JEM SFWMM Grid Reader & NetCDF IOSP Library
 Joint Ecosystem Modeling (JEM)  
-http://jem.usgs.gov  
+https://jem.gov/  
 JEM is a partnership among federal agencies (USGS/USFWS/NPS/USACE), universities and other organizations.  
 
 [![Build Status](https://travis-ci.org/usgs/jem-sfwmm-grid-reader.svg?branch=master)](https://travis-ci.org/usgs/jem-sfwmm-grid-reader)
@@ -27,12 +27,15 @@ To compile this application, ensure you have the Java SDK 8+ installed and Maven
  * https://maven.apache.org/
  
 To compile standard jar dependencies and run unit tests:
+
 	$ mvn install
 
 To explicitly use standard jar packaging use:
+
 	$ mvn install -P packaging-jar
 
 To compile for Eclipse-based applications using Tycho, use: 
+
 	$ mvn install -P packaging-eclipse
 
 JavaDocs can be generated with the following command:
