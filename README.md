@@ -1,9 +1,11 @@
-JEM SFWMM Grid Reader & NetCDF IOSP Library
+# JEM SFWMM Grid Reader & NetCDF IOSP Library
 Joint Ecosystem Modeling (JEM)
 http://jem.usgs.gov
 JEM is a partnership among federal agencies (USGS/USFWS/NPS/USACE), universities and other organizations.
 
-DISCLAIMER
+[![Build Status](https://travis-ci.org/usgs/jem-sfwmm-grid-reader.svg?branch=master)](https://travis-ci.org/usgs/jem-sfwmm-grid-reader)
+
+## DISCLAIMER
 This Software and any support from the JEM Community are provided
 "AS IS" and without warranty, express or implied. JEM specifically
 disclaim any implied warranties of merchantability for a particular
@@ -19,6 +21,7 @@ and related program material nor shall the fact of distribution
 constitute any such warranty, and no responsibility is assumed
 by the USGS in connection therewith.  This software is provisional.
 
+## Build
 To compile this application, ensure you have the Java SDK 8+ installed and Maven. Use the Maven tool in the root of this project:
  * http://www.oracle.com/technetwork/java/javase/downloads/index.html
  * https://maven.apache.org/
@@ -39,7 +42,7 @@ $ mvn javadoc:javadoc -P packaging-jar
 External dependencies:
  * See project pom.xml files, all dependencies are Maven projects
 
-Example Maven build:
+## Example Maven build
 [INFO] ------------------------------------------------------------------------
 [INFO] Building JEM SFWMM Grid Reader Parent 1.0.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
@@ -60,6 +63,6 @@ Example Maven build:
 [INFO] Final Memory: 23M/219M
 [INFO] ------------------------------------------------------------------------
 
-Usage:
+## Usage
  - See Main.java in gov.usgs.jem.sfwmm.grid/example
  - See Main.java in gov.usgs.jem.netcdf.iosp.sfwmm.grid/example
