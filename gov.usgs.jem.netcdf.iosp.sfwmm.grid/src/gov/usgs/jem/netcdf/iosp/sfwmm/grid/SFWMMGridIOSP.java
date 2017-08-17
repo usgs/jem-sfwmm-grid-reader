@@ -3,6 +3,12 @@ package gov.usgs.jem.netcdf.iosp.sfwmm.grid;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Range;
+import com.google.common.collect.Sets;
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,12 +27,6 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
-import com.google.common.collect.Sets;
-import com.google.common.io.Files;
 
 import gov.usgs.jem.sfwmm.grid.GIOReader;
 import ucar.ma2.Array;
@@ -793,18 +793,16 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 			 */
 			else if (m_DataVariableName.equals(shortName))
 			{
-				final boolean noSection = p_Section == null;
-				if (!noSection)
+				Section section = new Section(
+						new int[] { m_SizeT, m_SizeY, m_SizeX });
+				if (p_Section != null)
 				{
 					final int expectedRank = 3;
 					checkArgument(p_Section.getRank() == expectedRank,
 							"Invalid section rank. Expected %s but found %s.",
 							expectedRank, p_Section.getRank());
+					section = p_Section;
 				}
-
-				final Section section = noSection
-						? new Section(new int[] { m_SizeT, m_SizeY, m_SizeX })
-						: p_Section;
 
 				final int tOrigin = section.getOrigin(0);
 				final int yOrigin = section.getOrigin(1);
