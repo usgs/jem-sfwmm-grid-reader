@@ -33,13 +33,7 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<target>
-						<artifact>
-							<groupId>org.eclipse.download</groupId>
-							<artifactId>eclipse.updates</artifactId>
-							<version>${eclipse.version}</version>
-						</artifact>
-					</target>
+					
 					<environments>
 						<environment>
 							<os>win32</os>
@@ -61,4 +55,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>default</id>
+			<url>https://nwrcupdates.cr.usgs.gov/jem/eclipse/4.6/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 </project>
