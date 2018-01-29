@@ -58,7 +58,7 @@
 	<repositories>
 		<repository>
 			<id>default</id>
-			<url>https://nwrcupdates.cr.usgs.gov/jem/eclipse/4.6/</url>
+			<url>http://download.eclipse.org/eclipse/updates/4.6/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
