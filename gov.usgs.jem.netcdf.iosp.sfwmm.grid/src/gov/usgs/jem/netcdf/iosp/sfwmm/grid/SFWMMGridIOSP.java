@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
-
+import gov.usgs.jem.sfwmm.grid.GIOReader;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -27,8 +27,6 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import gov.usgs.jem.sfwmm.grid.GIOReader;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
 import ucar.ma2.InvalidRangeException;
@@ -627,7 +625,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		}
 		m_SupportingVariables.add(xVariable);
 
-		m_DataVariableName = Files.getNameWithoutExtension(m_File.getName());
+		m_DataVariableName = Files.getNameWithoutExtension(m_File.getName())
+				.replace(".", "");
 
 		/**
 		 * A CRS variable is created with respect to the coordinate reference
