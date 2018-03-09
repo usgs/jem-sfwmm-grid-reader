@@ -1,7 +1,6 @@
 package gov.usgs.jem.sfwmm.grid;
 
 import java.io.File;
-
 import org.apache.log4j.BasicConfigurator;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -61,6 +60,12 @@ public class AllTests
 		return new File("../test/data/eomth_stage.bin");
 	}
 
+	/**
+	 * Setup logging
+	 * 
+	 * @throws Exception
+	 * @since Mar 9, 2018
+	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
 	{

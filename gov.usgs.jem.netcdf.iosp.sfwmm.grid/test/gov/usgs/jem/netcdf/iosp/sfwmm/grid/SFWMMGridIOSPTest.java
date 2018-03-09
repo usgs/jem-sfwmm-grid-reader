@@ -2,23 +2,20 @@ package gov.usgs.jem.netcdf.iosp.sfwmm.grid;
 
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.google.common.io.Files;
-
 import ucar.ma2.IndexIterator;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Attribute;
@@ -137,6 +134,7 @@ public class SFWMMGridIOSPTest
 	 *             if unexpected condition causing test failure
 	 * @since Oct 28, 2016
 	 */
+	@SuppressWarnings("static-method")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -178,6 +176,7 @@ public class SFWMMGridIOSPTest
 	 *
 	 * @throws IOException
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testGetFileTypeDescription() throws IOException
 	{
@@ -192,6 +191,7 @@ public class SFWMMGridIOSPTest
 			final String message = String.format(
 					"Unable to get file type description for %s",
 					AllTests.getTestFile());
+			e.printStackTrace();
 			fail(message);
 		}
 	}
@@ -200,6 +200,7 @@ public class SFWMMGridIOSPTest
 	 * Test method for
 	 * {@link gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP#getFileTypeId()}.
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testGetFileTypeId()
 	{
@@ -214,6 +215,7 @@ public class SFWMMGridIOSPTest
 			final String message = String.format(
 					"Unable to get file type description for %s",
 					AllTests.getTestFile());
+			e.printStackTrace();
 			fail(message);
 		}
 	}
@@ -222,6 +224,7 @@ public class SFWMMGridIOSPTest
 	 * Test method for
 	 * {@link gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP#isValidFile(ucar.unidata.io.RandomAccessFile)}.
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testIsValidFile()
 	{
@@ -236,15 +239,16 @@ public class SFWMMGridIOSPTest
 			final String message = String.format(
 					"Unable to test if the file is valid: %s",
 					AllTests.getTestFile());
+			e.printStackTrace();
 			fail(message);
 		}
 	}
 
 	/**
 	 * Test method for
-	 * {@link gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP#open(RandomAccessFile,
-	 * NetcdfFile, ucar.nc2.util.CancelTask)()}.
+	 * {@link gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP#open(RandomAccessFile, NetcdfFile, ucar.nc2.util.CancelTask)}.
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testOpen()
 	{
@@ -333,6 +337,7 @@ public class SFWMMGridIOSPTest
 	 *
 	 * @throws IOException
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testReadData() throws IOException
 	{
@@ -366,6 +371,7 @@ public class SFWMMGridIOSPTest
 	 * @throws IOException
 	 * @throws InvalidRangeException
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testReadData2() throws IOException, InvalidRangeException
 	{

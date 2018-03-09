@@ -2,19 +2,16 @@ package gov.usgs.jem.sfwmm.grid.example;
 
 import static com.google.common.base.Preconditions.checkElementIndex;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Range;
+import gov.usgs.jem.sfwmm.grid.AllTests;
+import gov.usgs.jem.sfwmm.grid.GIOHeader;
+import gov.usgs.jem.sfwmm.grid.GIOReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.log4j.BasicConfigurator;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Range;
-
-import gov.usgs.jem.sfwmm.grid.AllTests;
-import gov.usgs.jem.sfwmm.grid.GIOHeader;
-import gov.usgs.jem.sfwmm.grid.GIOReader;
 
 /**
  * Example using {@link GIOReader}
@@ -31,6 +28,12 @@ public final class Main
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger
 			.getLogger(Main.class);
 
+	/**
+	 * @param args
+	 *            unused
+	 * @throws IOException
+	 * @since Mar 9, 2018
+	 */
 	public static void main(final String[] args) throws IOException
 	{
 		BasicConfigurator.configure();

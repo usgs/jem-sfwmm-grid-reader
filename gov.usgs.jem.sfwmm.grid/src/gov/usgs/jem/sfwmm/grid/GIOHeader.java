@@ -39,6 +39,11 @@ public final class GIOHeader
 
 		}
 
+		/**
+		 * @return {@link GIOHeader} instance
+		 * @throws Exception
+		 * @since Mar 9, 2018
+		 */
 		public GIOHeader build() throws Exception
 		{
 			return new GIOHeader(this);

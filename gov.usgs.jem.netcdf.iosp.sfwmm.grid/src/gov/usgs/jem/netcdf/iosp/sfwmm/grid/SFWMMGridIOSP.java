@@ -522,7 +522,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		{
 			final String message = String
 					.format("Unable to parse dates from file %s", m_File);
-			log.error(message);
+			log.error(message, e);
 			close();
 			throw new IOException(message);
 		}
@@ -734,7 +734,10 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		}
 		catch (final UnknownHostException e)
 		{
-
+			/**
+			 * Ignore
+			 */
+			checkNotNull(e);
 		}
 		ncfile.addAttribute(null, new Attribute("author",
 				String.format("%s on %s", user, computerName)));

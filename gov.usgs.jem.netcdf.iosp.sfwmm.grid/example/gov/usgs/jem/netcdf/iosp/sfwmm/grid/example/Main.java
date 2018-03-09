@@ -1,12 +1,10 @@
 package gov.usgs.jem.netcdf.iosp.sfwmm.grid.example;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.apache.log4j.BasicConfigurator;
-
 import gov.usgs.jem.netcdf.iosp.sfwmm.grid.AllTests;
 import gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.apache.log4j.BasicConfigurator;
 import ucar.nc2.FileWriter2;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFileWriter.Version;
@@ -26,6 +24,14 @@ public final class Main
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger
 			.getLogger(Main.class);
 
+	/**
+	 * @param args
+	 *            unused
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @since Mar 9, 2018
+	 */
 	public static void main(final String[] args)
 			throws IOException, IllegalAccessException, InstantiationException
 	{

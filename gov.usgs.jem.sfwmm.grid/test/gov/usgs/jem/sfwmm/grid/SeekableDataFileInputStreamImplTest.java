@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -188,6 +187,10 @@ public class SeekableDataFileInputStreamImplTest
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 * @since Mar 9, 2018
+	 */
 	@Test
 	public final void testEquals() throws Exception
 	{
@@ -239,6 +242,10 @@ public class SeekableDataFileInputStreamImplTest
 		Assert.assertEquals(pos, m_Input.getPosition());
 	}
 
+	/**
+	 * @throws Exception
+	 * @since Mar 9, 2018
+	 */
 	@Test
 	public final void testHashCode() throws Exception
 	{

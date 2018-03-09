@@ -4,6 +4,14 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.BoundType;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Range;
+import com.google.common.collect.SortedMultiset;
+import com.google.common.collect.TreeMultiset;
+import com.google.common.io.Files;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -17,17 +25,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.apache.log4j.Level;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.BoundType;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Range;
-import com.google.common.collect.SortedMultiset;
-import com.google.common.collect.TreeMultiset;
-import com.google.common.io.Files;
 
 /**
  * Reads SFWMM GridIO files.
@@ -663,6 +661,7 @@ public final class GIOReader implements Closeable
 				}
 				catch (final ParseException e)
 				{
+					checkNotNull(e);
 					m_GridStartByte++;
 					continue;
 				}

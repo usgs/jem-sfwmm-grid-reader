@@ -1,5 +1,6 @@
 package gov.usgs.jem.sfwmm.grid;
 
+import com.google.common.collect.Range;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -7,14 +8,11 @@ import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.common.collect.Range;
 
 /**
  * Tests {@link GIOReader}
@@ -167,6 +165,7 @@ public class GIOReaderTest
 	 * Test method for
 	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#open(java.lang.String)}.
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testOpen()
 	{
@@ -186,6 +185,7 @@ public class GIOReaderTest
 	 * Test method for
 	 * {@link gov.usgs.jem.sfwmm.grid.GIOReader#openDebug(java.lang.String)}.
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testOpenDebug()
 	{
