@@ -5,7 +5,7 @@
 
 	<groupId>gov.usgs.jem.netcdf.iosp.sfwmm.grid.group</groupId>
 	<artifactId>gov.usgs.jem.netcdf.iosp.sfwmm.grid</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>${packaging.type}</packaging>
 	<name>JEM SFWMM Grid Reader NetCDF IOSP Plug-in</name>
 	<profiles>
