@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JEM SFWMM Grid Reader Library
 Bundle-SymbolicName: gov.usgs.jem.sfwmm.grid
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: USGS/JEM
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: guava;bundle-version="29.0.0",

@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JEM SFWMM Grid Reader NetCDF IOSP
 Bundle-SymbolicName: gov.usgs.jem.netcdf.iosp.sfwmm.grid
-Bundle-Version: 1.0.1.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: USGS/JEM
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: guava;bundle-version="29.0.0",
  org.apache.log4j;bundle-version="1.2.17",
  org.junit;bundle-version="4.12.0",
- gov.usgs.jem.sfwmm.grid;bundle-version="1.0.1",
+ gov.usgs.jem.sfwmm.grid;bundle-version="1.0.2",
  edu.ucar.unidata.netcdf;bundle-version="5.1.0"
 Export-Package: gov.usgs.jem.netcdf.iosp.sfwmm.grid
