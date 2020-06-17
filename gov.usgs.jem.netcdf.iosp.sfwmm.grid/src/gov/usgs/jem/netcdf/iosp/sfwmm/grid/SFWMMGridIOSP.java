@@ -381,8 +381,8 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	{
 		final int[] dateIndexes = getDateIndexes(m_Reader.getDates(),
 				m_TimeStep);
-		final Array cacheData = Array.factory(int.class, new int[] { m_SizeT },
-				dateIndexes);
+		final Array cacheData = Array.factory(DataType.INT,
+				new int[] { m_SizeT }, dateIndexes);
 		return cacheData;
 	}
 
@@ -403,7 +403,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		/**
 		 * Build coords list - x
 		 */
-		cacheData = Array.factory(double.class, new int[] { m_SizeX });
+		cacheData = Array.factory(DataType.DOUBLE, new int[] { m_SizeX });
 		final double refX = 466641.10;
 		IntStream.range(0, m_SizeX)
 				.forEach(i -> cacheData.setObject(i, refX + i * CELL_SIZE_M));
@@ -428,7 +428,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		/**
 		 * Build coords list - y, reverse order
 		 */
-		cacheData = Array.factory(double.class, new int[] { m_SizeY });
+		cacheData = Array.factory(DataType.DOUBLE, new int[] { m_SizeY });
 		final double refY = 2779814.25 + (m_SizeY - 1) * CELL_SIZE_M
 				+ 0.5 * CELL_SIZE_M;
 		IntStream.range(0, m_SizeY)
