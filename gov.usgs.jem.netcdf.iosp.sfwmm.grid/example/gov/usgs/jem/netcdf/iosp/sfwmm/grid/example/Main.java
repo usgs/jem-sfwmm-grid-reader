@@ -5,12 +5,11 @@ import gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.apache.log4j.BasicConfigurator;
-import ucar.nc2.FileWriter2;
 import ucar.nc2.NetcdfFile;
-import ucar.nc2.NetcdfFileWriter.Version;
+import ucar.nc2.NetcdfFiles;
 
 /**
- * Example showing how to convert from the 2x2’s .bin format to a NetCDF file
+ * Example showing how to convert from the 2x2's .bin format to a NetCDF file
  *
  * @author mckelvym
  * @since Nov 4, 2016
@@ -32,6 +31,7 @@ public final class Main
 	 * @throws InstantiationException
 	 * @since Mar 9, 2018
 	 */
+	@SuppressWarnings({ "deprecation", "resource" })
 	public static void main(final String[] args)
 			throws IOException, IllegalAccessException, InstantiationException
 	{
@@ -43,25 +43,26 @@ public final class Main
 		/**
 		 * Register the service provider with the NetCDF library
 		 */
-		NetcdfFile.registerIOProvider(SFWMMGridIOSP.class);
+		NetcdfFiles.registerIOProvider(SFWMMGridIOSP.class);
 
 		/**
 		 * Proceed to open file through CDM as any other NetCDF file
 		 */
-		try (NetcdfFile nc = NetcdfFile.open(inputFilePath))
+		try (NetcdfFile nc = NetcdfFiles.open(inputFilePath))
 		{
 			/**
 			 * Copy to 'real' NetCDF
 			 */
-			final FileWriter2 writer = new FileWriter2(nc, outputFilePath,
-					Version.netcdf3, null);
+			final ucar.nc2.FileWriter2 writer = new ucar.nc2.FileWriter2(nc,
+					outputFilePath, ucar.nc2.NetcdfFileWriter.Version.netcdf3,
+					null);
 			writer.write();
 		}
 
 		/**
 		 * Log CDL
 		 */
-		try (NetcdfFile nc = NetcdfFile.open(outputFilePath))
+		try (NetcdfFile nc = NetcdfFiles.open(outputFilePath))
 		{
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			nc.writeCDL(out, false);

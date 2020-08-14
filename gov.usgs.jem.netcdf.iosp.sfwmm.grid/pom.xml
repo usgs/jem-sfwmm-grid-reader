@@ -5,7 +5,7 @@
 
 	<groupId>gov.usgs.jem.netcdf.iosp.sfwmm.grid.group</groupId>
 	<artifactId>gov.usgs.jem.netcdf.iosp.sfwmm.grid</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>${packaging.type}</packaging>
 	<name>JEM SFWMM Grid Reader NetCDF IOSP Plug-in</name>
 	<profiles>
@@ -26,8 +26,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<packaging.type>jar</packaging.type>
 
-		<com.google.guava.version>27.1-jre</com.google.guava.version>
-		<edu.ucar.unidata.netcdf.version>5.1.0</edu.ucar.unidata.netcdf.version>
+		<com.google.guava.version>29.0-jre</com.google.guava.version>
+		<edu.ucar.unidata.netcdf.version>5.3.3</edu.ucar.unidata.netcdf.version>
 		<org.apache.log4j.version>1.2.17</org.apache.log4j.version>
 		<org.junit.version>4.12</org.junit.version>
 		<org.junit.plugin.version>4.12.0</org.junit.plugin.version>
@@ -117,7 +117,7 @@
 		</dependency>
 		<dependency>
 			<groupId>edu.ucar</groupId>
-			<artifactId>cdm</artifactId>
+			<artifactId>cdm-core</artifactId>
 			<version>${edu.ucar.unidata.netcdf.version}</version>
 		</dependency>
 	</dependencies>

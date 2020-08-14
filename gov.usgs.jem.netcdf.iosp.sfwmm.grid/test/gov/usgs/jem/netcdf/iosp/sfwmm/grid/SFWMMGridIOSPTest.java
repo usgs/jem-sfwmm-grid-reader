@@ -21,6 +21,7 @@ import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 import ucar.nc2.NetcdfFile;
+import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
 import ucar.nc2.iosp.IOServiceProvider;
 import ucar.nc2.util.CancelTask;
@@ -61,6 +62,7 @@ public class SFWMMGridIOSPTest
 		 * @throws IOException
 		 *             problem opening the file
 		 */
+		@SuppressWarnings("deprecation")
 		MakeNetcdfFile(final IOServiceProvider p_SPI,
 				final RandomAccessFile p_Raf, final String p_Location,
 				final CancelTask p_CancelTask) throws IOException
@@ -138,7 +140,7 @@ public class SFWMMGridIOSPTest
 	@Before
 	public void setUp() throws Exception
 	{
-		NetcdfFile.registerIOProvider(SFWMMGridIOSP.class, true);
+		NetcdfFiles.registerIOProvider(SFWMMGridIOSP.class);
 	}
 
 	/**
@@ -156,7 +158,7 @@ public class SFWMMGridIOSPTest
 		inputFile.deleteOnExit();
 		Files.copy(refFile, inputFile);
 
-		try (NetcdfFile nc = NetcdfFile.open(inputFile.getAbsolutePath()))
+		try (NetcdfFile nc = NetcdfFiles.open(inputFile.getAbsolutePath()))
 		{
 			nc.close();
 			Assert.assertTrue("Unable to delete.", inputFile.delete());
@@ -180,7 +182,7 @@ public class SFWMMGridIOSPTest
 	@Test
 	public void testGetFileTypeDescription() throws IOException
 	{
-		try (NetcdfFile nc = NetcdfFile
+		try (NetcdfFile nc = NetcdfFiles
 				.open(AllTests.getTestFile().getAbsolutePath()))
 		{
 			Assert.assertEquals(SFWMMGridIOSP.class.getSimpleName(),
@@ -204,7 +206,7 @@ public class SFWMMGridIOSPTest
 	@Test
 	public void testGetFileTypeId()
 	{
-		try (NetcdfFile nc = NetcdfFile
+		try (NetcdfFile nc = NetcdfFiles
 				.open(AllTests.getTestFile().getAbsolutePath()))
 		{
 			Assert.assertEquals(SFWMMGridIOSP.class.getCanonicalName(),
@@ -248,7 +250,7 @@ public class SFWMMGridIOSPTest
 	 * Test method for
 	 * {@link gov.usgs.jem.netcdf.iosp.sfwmm.grid.SFWMMGridIOSP#open(RandomAccessFile, NetcdfFile, ucar.nc2.util.CancelTask)}.
 	 */
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "deprecation" })
 	@Test
 	public void testOpen()
 	{
@@ -341,7 +343,7 @@ public class SFWMMGridIOSPTest
 	@Test
 	public void testReadData() throws IOException
 	{
-		try (NetcdfFile nc = NetcdfFile
+		try (NetcdfFile nc = NetcdfFiles
 				.open(AllTests.getTestFile().getAbsolutePath()))
 		{
 			final Variable variable = nc.findVariable(Files
@@ -375,7 +377,7 @@ public class SFWMMGridIOSPTest
 	@Test
 	public void testReadData2() throws IOException, InvalidRangeException
 	{
-		try (NetcdfFile nc = NetcdfFile
+		try (NetcdfFile nc = NetcdfFiles
 				.open(AllTests.getTestFile().getAbsolutePath()))
 		{
 			final Variable variable = nc.findVariable(Files

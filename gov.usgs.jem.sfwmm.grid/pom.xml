@@ -5,7 +5,7 @@
 
 	<groupId>gov.usgs.jem.sfwmm.grid.group</groupId>
 	<artifactId>gov.usgs.jem.sfwmm.grid</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>${packaging.type}</packaging>
 	<name>JEM SFWMM Grid Reader Library Plug-in</name>
 	<profiles>
@@ -26,7 +26,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<packaging.type>jar</packaging.type>
 
-		<com.google.guava.version>27.1-jre</com.google.guava.version>
+		<com.google.guava.version>29.0-jre</com.google.guava.version>
 		<org.apache.log4j.version>1.2.17</org.apache.log4j.version>
 		<org.junit.version>4.12</org.junit.version>
 		<org.junit.plugin.version>4.12.0</org.junit.plugin.version>

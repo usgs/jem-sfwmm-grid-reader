@@ -62,7 +62,7 @@ public class AllTests
 
 	/**
 	 * Setup logging
-	 * 
+	 *
 	 * @throws Exception
 	 * @since Mar 9, 2018
 	 */

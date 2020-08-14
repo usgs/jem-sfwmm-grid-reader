@@ -3,7 +3,7 @@
     "name": "jem-sfwmm-grid-reader",
     "organization": "U.S. Geological Survey",
     "description": "JEM SFWMM Grid Reader & NetCDF IOSP Library",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "status": "Beta",
 
     "permissions": {
