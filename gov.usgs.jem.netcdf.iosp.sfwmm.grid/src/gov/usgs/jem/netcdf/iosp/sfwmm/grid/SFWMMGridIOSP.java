@@ -345,7 +345,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 	 */
 	public SFWMMGridIOSP()
 	{
-
+		/** Nothing for now */
 	}
 
 	@Override
@@ -491,6 +491,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void open(final RandomAccessFile p_RAF,
 			final NetcdfFile p_NetcdfFile, final CancelTask p_CancelTask)
@@ -746,6 +747,7 @@ public final class SFWMMGridIOSP extends AbstractIOServiceProvider
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Array readData(final Variable p_Variable, final Section p_Section)
 			throws IOException, InvalidRangeException

@@ -36,7 +36,7 @@ public final class GIOHeader
 		 */
 		private Builder()
 		{
-
+			/** Nothing for now */
 		}
 
 		/**
