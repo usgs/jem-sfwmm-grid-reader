@@ -1,29 +1,32 @@
 JEM SFWMM Grid Reader & NetCDF IOSP Library
 
+v2.0.0 - 2020-10-19
+ * Update for Java 11
+	
 v1.0.3 - 2020-08-14
-	* Library updates:
-		* edu.ucar.unidata.netcdf;bundle-version="5.3.3",
-	* Attempt to resolve some compiler warnings for deprecated API changes 
-		
+ * Library updates:
+   * edu.ucar.unidata.netcdf;bundle-version="5.3.3",
+ * Attempt to resolve some compiler warnings for deprecated API changes 
+  
 v1.0.2 - 2020-06-16
-	* Don't exclude 'test' from source build
-	* Update Tycho to 1.1.0
-	* guava;bundle-version="29.0.0"
-	* edu.ucar.unidata.netcdf;bundle-version="5.1.0"
+ * Don't exclude 'test' from source build
+ * Update Tycho to 1.1.0
+ * guava;bundle-version="29.0.0"
+ * edu.ucar.unidata.netcdf;bundle-version="5.1.0"
 
 v1.0.1 - 2018-03-09
-	* When determining the IOSP data variable name, strip periods from the file name
-	* Update Tycho to 1.1.0
-	* Use http://download.eclipse.org/eclipse/updates/4.6/
-	* Use <repository>-based target definition in POM
-	* Rename disclaimer file from txt to md
-	* Rename license file from txt to md
-	* Address "Potential null pointer access" error(s)
-	* Rename README.txt to use Markdown and show build status
-	* Added Travis CI YML
-	* Address FileInputStream/FileOutputStream gc finalizer issue
-	* Instructions for compiling JavaDocs added to README
-	* Guava 20.0
-	
-v1.0.0 - 2016/11/29
-	* Initial release of SFWMM Grid Reader library and NetCDF IOSP wrapper
+ * When determining the IOSP data variable name, strip periods from the file name
+ * Update Tycho to 1.1.0
+ * Use http://download.eclipse.org/eclipse/updates/4.6/
+ * Use <repository>-based target definition in POM
+ * Rename disclaimer file from txt to md
+ * Rename license file from txt to md
+ * Address "Potential null pointer access" error(s)
+ * Rename README.txt to use Markdown and show build status
+ * Added Travis CI YML
+ * Address FileInputStream/FileOutputStream gc finalizer issue
+ * Instructions for compiling JavaDocs added to README
+ * Guava 20.0
+ 
+v1.0.0 - 2016-11-29
+ * Initial release of SFWMM Grid Reader library and NetCDF IOSP wrapper

@@ -23,6 +23,7 @@ import org.junit.runners.MethodSorters;
 public class SeekableDataFileInputStreamImplTest
 {
 
+	@SuppressWarnings("javadoc")
 	private static final java.util.Random r;
 
 	static
@@ -61,38 +62,55 @@ public class SeekableDataFileInputStreamImplTest
 
 	}
 
+	@SuppressWarnings("javadoc")
 	private ByteOrder					m_ByteOrder;
 
+	@SuppressWarnings("javadoc")
 	private byte[]						m_Bytes;
 
+	@SuppressWarnings("javadoc")
 	private boolean						m_ExpectedBoolean;
 
+	@SuppressWarnings("javadoc")
 	private byte						m_ExpectedByte;
 
+	@SuppressWarnings("javadoc")
 	private byte[]						m_ExpectedBytes;
 
+	@SuppressWarnings("javadoc")
 	private char						m_ExpectedChar;
 
+	@SuppressWarnings("javadoc")
 	private char						m_ExpectedCharAscii;
 
+	@SuppressWarnings("javadoc")
 	private double						m_ExpectedDouble;
 
+	@SuppressWarnings("javadoc")
 	private float						m_ExpectedFloat;
 
+	@SuppressWarnings("javadoc")
 	private int							m_ExpectedInt;
 
+	@SuppressWarnings("javadoc")
 	private long						m_ExpectedLong;
 
+	@SuppressWarnings("javadoc")
 	private short						m_ExpectedShort;
 
+	@SuppressWarnings("javadoc")
 	private byte						m_ExpectedUByte;
 
+	@SuppressWarnings("javadoc")
 	private int							m_ExpectedUInt32;
 
+	@SuppressWarnings("javadoc")
 	private short						m_ExpectedUShort;
 
+	@SuppressWarnings("javadoc")
 	private String						m_FilePath;
 
+	@SuppressWarnings("javadoc")
 	private SeekableDataFileInputStream	m_Input;
 
 	/**
