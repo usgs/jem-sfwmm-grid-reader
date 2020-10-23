@@ -66,6 +66,7 @@ public class GIOReaderTest
 				.mapToObj(i -> (Float) p_Values[i]);
 	}
 
+	@SuppressWarnings("javadoc")
 	private GIOReader m_Reader;
 
 	/**

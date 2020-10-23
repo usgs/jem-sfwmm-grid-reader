@@ -21,6 +21,7 @@ import org.junit.runners.MethodSorters;
 public class GIOHeaderTest
 {
 
+	@SuppressWarnings("javadoc")
 	private static final Random r;
 
 	static
@@ -28,6 +29,7 @@ public class GIOHeaderTest
 		r = new Random(System.currentTimeMillis());
 	}
 
+	@SuppressWarnings("javadoc")
 	private static void expectFailure(final GIOHeader.Builder p_Builder)
 	{
 		try
@@ -57,6 +59,7 @@ public class GIOHeaderTest
 		AllTests.assertHasRequiredMethods(classToTest, testingClass);
 	}
 
+	@SuppressWarnings("javadoc")
 	private GIOHeader.Builder m_Builder;
 
 	/**

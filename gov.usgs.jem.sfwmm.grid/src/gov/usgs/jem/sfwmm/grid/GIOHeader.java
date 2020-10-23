@@ -24,11 +24,40 @@ public final class GIOHeader
 	 */
 	public static class Builder
 	{
+		/**
+		 * @see #withNumCols(int)
+		 * @author mckelvym
+		 */
 		private int		m_bNumCols;
+
+		/**
+		 * @see #withNumNodes(int)
+		 * @author mckelvym
+		 */
 		private int		m_bNumNodes;
+
+		/**
+		 * @see #withNumRows(int)
+		 * @author mckelvym
+		 */
 		private int		m_bNumRows;
+
+		/**
+		 * @see #withSize(float, float)
+		 * @author mckelvym
+		 */
 		private float	m_bSizeX;
+
+		/**
+		 * @see #withSize(float, float)
+		 * @author mckelvym
+		 */
 		private float	m_bSizeY;
+
+		/**
+		 * @see #withTitle(String)
+		 * @author mckelvym
+		 */
 		private String	m_bTitle;
 
 		/**

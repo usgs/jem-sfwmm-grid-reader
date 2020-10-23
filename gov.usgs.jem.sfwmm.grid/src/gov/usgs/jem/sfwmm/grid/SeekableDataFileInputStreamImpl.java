@@ -65,6 +65,11 @@ final class SeekableDataFileInputStreamImpl
 	 */
 	private BufferedInputStream	m_InputStream;
 
+	/**
+	 * Read position within the stream
+	 *
+	 * @author mckelvym
+	 */
 	private long				m_Position;
 
 	/**
